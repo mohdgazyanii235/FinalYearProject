@@ -30,6 +30,12 @@
   - From today onwards, I plan to dedicate minimum 3 hours a day to work on my project including weekends.
   - This way I will be able to achieve the objectives outlined in the project plan.
   - The plan for today is to finish an informal software requirements document that describes the features of the application.
+- Goals for tomorrow:
+  - Import all the required dependencies for the project.
+  - Finish all the videos on Spring Security that I have listed today.
+  - Create a data flow diagram that displays how the authentication process will work.
+  - The goal is to create documentation first so the process of writing code is very smooth.
+
 
 
 
