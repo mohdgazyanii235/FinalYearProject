@@ -12,5 +12,22 @@
 - I also want to create a plan of using GitLab's Issue board as a way to track features and bugs.
 - By the end of this week, I also want to work on create an ER diagram for my database.
 
+### 25th October 2023:
+- I have Initialised the Spring Boot project.
+  - The idea is to have both the front-end ReactJs application and the Spring Boot backend to be stored in the repository.
+  - I will currently only focus on working on the Backend.
+
+### 1st November 2023:
+- I have been working on the Year In Industry Report and have not had the time to work on my project.
+- Thankfully, the YINI reported has been submitted and I can now focus on my project.
+- Goals for today:
+  - Complete watching the following videos on Spring Security:
+    - https://www.youtube.com/watch?v=nSu9ElsnNtY&list=PLEocw3gLFc8X_a8hGWGaBnSkPFJmbb8QP
+    - https://www.youtube.com/watch?v=dFvbHZ8CuKM&list=PLEocw3gLFc8X_a8hGWGaBnSkPFJmbb8QP&index=2&pp=iAQB
+    - https://www.youtube.com/watch?v=oKzeHshquCs&list=PLEocw3gLFc8X_a8hGWGaBnSkPFJmbb8QP&index=9&pp=iAQB
+    - https://www.youtube.com/watch?v=ZIS4273AAGI&t=3579s
+  - Create a plan of action for work for tomorrow.
+  - From today onwards, I plan to dedicate minimum 2 hours a day to work on my project including weekends.
+  - This way I will be able to achieve the objectives outlined in the project plan.
 
 
