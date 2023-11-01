@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### Documentation ###
+documentation/**
+!documentation/Software Requirements Document.pdf
