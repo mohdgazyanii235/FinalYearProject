@@ -27,7 +27,10 @@
     - https://www.youtube.com/watch?v=oKzeHshquCs&list=PLEocw3gLFc8X_a8hGWGaBnSkPFJmbb8QP&index=9&pp=iAQB
     - https://www.youtube.com/watch?v=ZIS4273AAGI&t=3579s
   - Create a plan of action for work for tomorrow.
-  - From today onwards, I plan to dedicate minimum 2 hours a day to work on my project including weekends.
+  - From today onwards, I plan to dedicate minimum 3 hours a day to work on my project including weekends.
   - This way I will be able to achieve the objectives outlined in the project plan.
+  - The plan for today is to finish an informal software requirements document that describes the features of the application.
+
+
 
 
