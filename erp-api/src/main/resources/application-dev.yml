@@ -1,0 +1,27 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ***REMOVED***
+            clientSecret: ***REMOVED***
+            redirectUri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - email
+              - profile
+        provider:
+          google:
+            authorizationUri: https://accounts.google.com/o/oauth2/auth
+            tokenUri: https://oauth2.googleapis.com/token
+            userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+            userNameAttribute: sub
+            jwkSetUri: https://www.googleapis.com/oauth2/v3/certs
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:mydb
+    Username: sa
+    password: password
+    jpa:
+      spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+
