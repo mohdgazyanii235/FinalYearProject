@@ -10,6 +10,7 @@ spring:
             scope:
               - email
               - profile
+              - openid
         provider:
           google:
             authorizationUri: https://accounts.google.com/o/oauth2/auth
@@ -18,10 +19,10 @@ spring:
             userNameAttribute: sub
             jwkSetUri: https://www.googleapis.com/oauth2/v3/certs
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:mydb
-    Username: sa
-    password: password
-    jpa:
-      spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
-
+    url: jdbc:mysql://localhost:3306/human_capital_management_dev
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
