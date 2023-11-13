@@ -36,6 +36,10 @@
   - Create a data flow diagram that displays how the authentication process will work.
   - The goal is to create documentation first so the process of writing code is very smooth.
 
+### 13th November 2023:
+- According to goals set in the interim meeting I have managed to create connection between the spring boot application and the authorization server.
+- I still haven't figured out how the data will be stored in the database.
+- This is something that I need to do research on tomorrow.
 
 
 
