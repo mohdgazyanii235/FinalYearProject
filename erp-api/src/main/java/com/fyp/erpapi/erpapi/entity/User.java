@@ -1,25 +1,22 @@
 package com.fyp.erpapi.erpapi.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
 
-@Data
-@Builder
-public class User implements UserDetails, OidcUser {
+@Entity
+@Getter
+@Setter
+public class User implements UserDetails {
 
-    private String id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String firstName;
 
@@ -27,30 +24,24 @@ public class User implements UserDetails, OidcUser {
 
     private String email;
 
-    private String imageUrl;
+    private String password;
 
-    private Map<String, Object> attributes;
+    private Boolean isOnboardingComplete = false;
 
-    private Collection<? extends GrantedAuthority> authorities;
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return null;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return email;
     }
 
     @Override
@@ -73,23 +64,4 @@ public class User implements UserDetails, OidcUser {
         return true;
     }
 
-    @Override
-    public Map<String, Object> getClaims() {
-        return null;
-    }
-
-    @Override
-    public OidcUserInfo getUserInfo() {
-        return null;
-    }
-
-    @Override
-    public OidcIdToken getIdToken() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return firstName + " " + lastName;
-    }
 }
