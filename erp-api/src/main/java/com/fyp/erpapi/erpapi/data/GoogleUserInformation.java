@@ -25,4 +25,8 @@ public class GoogleUserInformation {
         return (String) attributes.get("email");
     }
 
+    public String getImageUrl() {
+        return (String) attributes.get("picture");
+    }
+
 }

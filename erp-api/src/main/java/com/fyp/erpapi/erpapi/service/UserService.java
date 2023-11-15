@@ -34,4 +34,8 @@ public class UserService implements UserDetailsService {
         }
         return user.get();
     }
+
+    public boolean isUserOnboardingComplete(String oidcUserEmail) {
+        return this.userRepository.isOnboardingCompleteByEmail(oidcUserEmail);
+    }
 }

@@ -31,6 +31,7 @@ public class CustomOIDCUserService extends OidcUserService {
             user.setFirstName(googleUserInformation.getFirstName());
             user.setLastName(googleUserInformation.getLastName());
             user.setPassword(UUID.randomUUID().toString());
+            user.setImageUrl(googleUserInformation.getImageUrl());
             userRepository.save(user);
         }
         return oidcUser;

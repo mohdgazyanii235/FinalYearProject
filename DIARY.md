@@ -41,6 +41,13 @@
 - I still haven't figured out how the data will be stored in the database.
 - This is something that I need to do research on tomorrow.
 
+### 15th November 2023:
+- I am now finally on track to achieving my goals for this term with this project.
+- The users/ resource owners can basically register and login to the application.
+- if a user is "onboarded" they can access their dashboard.
+- if the user is not "onboarded" they will be redirected to the onboarding page.
+- My next step is to achieve role based access control such that on login, users can decide their role in the company.
+
 
 
 
