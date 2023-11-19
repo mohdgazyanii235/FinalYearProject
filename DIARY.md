@@ -49,5 +49,10 @@
 - My next step is to achieve role based access control such that on login, users can decide their role in the company.
 
 
+### 19th November 2023:
+- Onboarding rest controller class defined in UserDetailsAndRolesSetUp Branch since it makes sense to me.
+- I will not be adding any code here. Code for the controller will be added in the onboarding branch.
+
+
 
 
