@@ -10,6 +10,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -24,6 +26,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @Log4j2
 @AllArgsConstructor
+@EnableMethodSecurity
 public class OAuth2LoginSecurityConfig {
 
     private final CustomOIDCUserService customOIDCUserService;
@@ -38,7 +41,10 @@ public class OAuth2LoginSecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .oidcUserService(customOIDCUserService))
                         .successHandler(new CustomAuthenticationSuccessHandler(userService)))
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
                 .build();
     }
 

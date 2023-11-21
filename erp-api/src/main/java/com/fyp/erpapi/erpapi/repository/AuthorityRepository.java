@@ -1,10 +1,11 @@
 package com.fyp.erpapi.erpapi.repository;
 
-import com.fyp.erpapi.erpapi.entity.Role;
+import com.fyp.erpapi.erpapi.entity.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
-    Role findByName(String name);
+public interface AuthorityRepository extends JpaRepository<Authority, Long> {
+
+
 }

@@ -7,6 +7,9 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Table(name = "user")
-public class User implements UserDetails {
+public class User implements UserDetails{
 
 
     @Id
@@ -86,5 +89,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }

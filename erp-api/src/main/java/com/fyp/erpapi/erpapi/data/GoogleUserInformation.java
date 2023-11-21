@@ -29,4 +29,8 @@ public class GoogleUserInformation {
         return (String) attributes.get("picture");
     }
 
+    public String getClaims() {
+        return (String) attributes.get("claims");
+    }
+
 }

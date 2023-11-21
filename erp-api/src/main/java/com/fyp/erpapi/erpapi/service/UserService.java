@@ -17,6 +17,9 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -48,7 +51,8 @@ public class UserService implements UserDetailsService {
 
 
 
-    public void registerUser(GoogleUserInformation googleUserInformation) {
+    public OidcUser registerUser(GoogleUserInformation googleUserInformation, OidcIdToken idToken, OidcUserInfo userInfo) {
+        System.out.println(googleUserInformation.getClaims());
         User user = new User();
         user.setEmail(googleUserInformation.getEmail());
         user.setFirstName(googleUserInformation.getFirstName());
@@ -58,5 +62,6 @@ public class UserService implements UserDetailsService {
         Role role = this.roleRepository.findByName("ROLE_USER");
         user.addRole(role);
         this.userRepository.save(user);
+        return new DefaultOidcUser(user.getAuthorities(), idToken, userInfo);
     }
 }
