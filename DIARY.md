@@ -53,6 +53,14 @@
 - Onboarding rest controller class defined in UserDetailsAndRolesSetUp Branch since it makes sense to me.
 - I will not be adding any code here. Code for the controller will be added in the onboarding branch.
 
+### 21st November 2023:
+- Worked extensively to understand how GrantedAuthority works in Spring Security.
+- Created custom implementation of GrantedAuthority called CustomGrantedAuthority. 
+- This class will make a lot of sense later on when trying to implement role based access control for method level security. For example, certain endpoints should only be hit by users with certain authorities.
+- I have seperated roles and authorities to explain the proof of concept here. Roles are like a users "badge" ("Receptionist" etc.) and authorities are like "what doors that user can enter" (In an obvious office analogy where role based access control is used).
+- Goal for tomorrow is to test these things out and see if they work!
+- Also, in theory the admin will have access to an endpoint that will allow them to create roles and authorities, remove roles and authorities etc... So like an AdminController. This is something I will work on later.
+- Goal for tomorrow is to create test cases for everything that is done, comment all the code and javadoc!
 
 
 

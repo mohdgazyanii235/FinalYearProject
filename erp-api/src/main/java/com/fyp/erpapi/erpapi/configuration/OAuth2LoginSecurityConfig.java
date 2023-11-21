@@ -36,23 +36,10 @@ public class OAuth2LoginSecurityConfig {
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/login/oauth2/code/*"))
                         .userInfoEndpoint(userInfo -> userInfo
-                                .userAuthoritiesMapper(this.userAuthoritiesMapper())
                                 .oidcUserService(customOIDCUserService))
                         .successHandler(new CustomAuthenticationSuccessHandler(userService)))
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                 .build();
-    }
-
-    private GrantedAuthoritiesMapper userAuthoritiesMapper() {
-        return (authorities) -> {
-            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
-            authorities.forEach(authority -> {
-                if (authority.getAuthority().equals("OIDC_USER") || authority.getAuthority().equals("OAUTH_USER")) {
-                    mappedAuthorities.add(() -> "ROLE_USER");
-                }
-            });
-            return mappedAuthorities;
-        };
     }
 
     @Bean

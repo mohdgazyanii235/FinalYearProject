@@ -19,6 +19,7 @@ import java.util.UUID;
 public class CustomOIDCUserService extends OidcUserService {
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
@@ -26,13 +27,7 @@ public class CustomOIDCUserService extends OidcUserService {
         GoogleUserInformation googleUserInformation = new GoogleUserInformation(oidcUser.getAttributes());
         Optional<User> userOptional = userRepository.getUserByEmail(googleUserInformation.getEmail());
         if (userOptional.isEmpty()) {
-            User user = new User();
-            user.setEmail(googleUserInformation.getEmail());
-            user.setFirstName(googleUserInformation.getFirstName());
-            user.setLastName(googleUserInformation.getLastName());
-            user.setPassword(UUID.randomUUID().toString());
-            user.setImageUrl(googleUserInformation.getImageUrl());
-            userRepository.save(user);
+            userService.registerUser(googleUserInformation);
         }
         return oidcUser;
     }
