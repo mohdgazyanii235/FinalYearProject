@@ -2,6 +2,7 @@ package com.fyp.erpapi.erpapi.service;
 
 import com.fyp.erpapi.erpapi.data.GoogleUserInformation;
 import com.fyp.erpapi.erpapi.entity.User;
+import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
 import com.fyp.erpapi.erpapi.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,7 +32,11 @@ public class CustomOIDCUserService extends OidcUserService {
         GoogleUserInformation googleUserInformation = new GoogleUserInformation(oidcUser.getAttributes());
         Optional<User> userOptional = userRepository.getUserByEmail(googleUserInformation.getEmail());
         if (userOptional.isEmpty()) {
-            return userService.registerUser(googleUserInformation, oidcUser.getIdToken(), oidcUser.getUserInfo());
+            try {
+                return userService.registerUser(googleUserInformation, oidcUser.getIdToken(), oidcUser.getUserInfo());
+            } catch (NoSuchRoleException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             User user = userOptional.get();
             List<GrantedAuthority> mappedAuthorities = (List<GrantedAuthority>) user.getAuthorities();

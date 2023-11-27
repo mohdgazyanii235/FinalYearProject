@@ -1,8 +1,10 @@
 package com.fyp.erpapi.erpapi.service;
 
 import com.fyp.erpapi.erpapi.data.GoogleUserInformation;
+import com.fyp.erpapi.erpapi.data.UserRoleDTO;
 import com.fyp.erpapi.erpapi.entity.Role;
 import com.fyp.erpapi.erpapi.entity.User;
+import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
 import com.fyp.erpapi.erpapi.repository.RoleRepository;
 import com.fyp.erpapi.erpapi.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -49,9 +51,7 @@ public class UserService implements UserDetailsService {
         return this.userRepository.isOnboardingCompleteByEmail(oidcUserEmail);
     }
 
-
-
-    public OidcUser registerUser(GoogleUserInformation googleUserInformation, OidcIdToken idToken, OidcUserInfo userInfo) {
+    public OidcUser registerUser(GoogleUserInformation googleUserInformation, OidcIdToken idToken, OidcUserInfo userInfo) throws NoSuchRoleException {
         System.out.println(googleUserInformation.getClaims());
         User user = new User();
         user.setEmail(googleUserInformation.getEmail());
@@ -59,9 +59,28 @@ public class UserService implements UserDetailsService {
         user.setLastName(googleUserInformation.getLastName());
         user.setPassword(UUID.randomUUID().toString());
         user.setImageUrl(googleUserInformation.getImageUrl());
-        Role role = this.roleRepository.findByName("USER");
-        user.addRole(role);
+        Optional<Role> roleOptional = this.roleRepository.findByName("USER");
+        if (roleOptional.isEmpty()) {
+            throw new NoSuchRoleException("USER");
+        } else {
+            Role role = roleOptional.get();
+            user.addRole(role);
+        }
         this.userRepository.save(user);
         return new DefaultOidcUser(user.getAuthorities(), idToken, userInfo);
+    }
+
+    public void assignRolesToUser(UserRoleDTO userRoleDTO) {
+        Optional<User> userOptional = this.userRepository.getUserByEmail(userRoleDTO.getEmail());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            userRoleDTO.getRoleNames().forEach(roleName -> {
+                Optional<Role> role = this.roleRepository.findByName(roleName);
+                role.ifPresent(user::addRole);
+            });
+            this.userRepository.save(user);
+        } else {
+            throw new UsernameNotFoundException(userRoleDTO.getEmail());
+        }
     }
 }
