@@ -59,7 +59,7 @@ public class UserService implements UserDetailsService {
         user.setLastName(googleUserInformation.getLastName());
         user.setPassword(UUID.randomUUID().toString());
         user.setImageUrl(googleUserInformation.getImageUrl());
-        Role role = this.roleRepository.findByName("ROLE_USER");
+        Role role = this.roleRepository.findByName("USER");
         user.addRole(role);
         this.userRepository.save(user);
         return new DefaultOidcUser(user.getAuthorities(), idToken, userInfo);

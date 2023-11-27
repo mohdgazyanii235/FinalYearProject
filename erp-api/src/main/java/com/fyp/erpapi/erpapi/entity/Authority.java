@@ -12,13 +12,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Authority {
 
-    public Authority(String name) {
-        this.name = name;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
+
+    public Authority(String name) {
+        this.name = name;
+    }
 }

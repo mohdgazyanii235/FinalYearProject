@@ -1,7 +1,9 @@
 package com.fyp.erpapi.erpapi.controller;
 
 import com.fyp.erpapi.erpapi.data.AuthorityDTO;
+import com.fyp.erpapi.erpapi.data.RoleDTO;
 import com.fyp.erpapi.erpapi.service.AuthorityService;
+import com.fyp.erpapi.erpapi.service.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +25,7 @@ public class AdminController {
      */
 
     private final AuthorityService authorityService;
+    private final RoleService roleService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/createNewAuthority")
@@ -30,6 +33,9 @@ public class AdminController {
         return ResponseEntity.ok(authorityService.createAndReturnAuthorityId(authorityDTO));
     }
 
-
-
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/createNewRole")
+    public ResponseEntity<?> createNewRole(@RequestBody RoleDTO roleDTO) {
+        return ResponseEntity.ok(roleService.createAndReturnRoleId(roleDTO));
+    }
 }

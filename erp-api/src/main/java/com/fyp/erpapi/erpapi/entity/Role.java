@@ -2,6 +2,7 @@ package com.fyp.erpapi.erpapi.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "role")
+@NoArgsConstructor
 public class Role {
 
     @Id
@@ -25,4 +27,8 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "authority_id") // Column name from the authority table
     )
     private Set<Authority> authorities;
+
+    public Role(String name) {
+        this.name = name;
+    }
 }

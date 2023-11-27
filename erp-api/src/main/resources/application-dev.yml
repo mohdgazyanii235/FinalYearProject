@@ -6,7 +6,7 @@ spring:
           google:
             clientId: ***REMOVED***
             clientSecret: ***REMOVED***
-            redirectUri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirectUri: "{baseUrl}/login/oauth2/code/google"
             scope:
               - email
               - profile
@@ -26,3 +26,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG

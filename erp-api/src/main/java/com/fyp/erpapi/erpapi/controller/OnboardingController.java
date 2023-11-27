@@ -24,6 +24,7 @@ public class OnboardingController {
     @GetMapping("/test")
     public String test() {
         OidcUser user = (OidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(user.getAuthorities().toString());
         for (GrantedAuthority authority : user.getAuthorities()) {
             CustomGrantedAuthority customGrantedAuthority = (CustomGrantedAuthority) authority;
             System.out.println(customGrantedAuthority.getAuthority());

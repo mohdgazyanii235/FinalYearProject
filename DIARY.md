@@ -62,5 +62,10 @@
 - Also, in theory the admin will have access to an endpoint that will allow them to create roles and authorities, remove roles and authorities etc... So like an AdminController. This is something I will work on later.
 - Goal for tomorrow is to create test cases for everything that is done, comment all the code and javadoc!
 
-
+### 27th November 2023:
+- I have been trying to solve a very big problem with my project with postman not being able to set up an authenticated session with my spring boot application.
+- This issue prevents me from testing my endpoints.
+- Because my application works as intended when I test it on the browser, my solution is to conduct a "coolie stealing" operation from the browser and into my postman
+- To do this I have set up some logging features, that allow me to steal the cookie from the browser and copy/paste them into postman.
+- This is not a very elegant solution but something I can worry about in the winter break.
 
