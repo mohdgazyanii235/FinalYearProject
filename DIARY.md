@@ -69,3 +69,11 @@
 - To do this I have set up some logging features, that allow me to steal the cookie from the browser and copy/paste them into postman.
 - This is not a very elegant solution but something I can worry about in the winter break.
 
+### 29th November 2023:
+- I have now merged everything to main and added some onboarding endpoints.
+- This is another place for me to show some role based access control.
+  - Basically to access each api endpoint the user has to have a specific role (for example NON_ONBOARDED_USER_A).
+  - This means that users that don't have that role can't change their details.
+  - This means that after onboarding, the user won't be able to change certain details.
+  - I have done this to show step by step secure onboarding process
+- Once the user has completed onboarding, they will get the role (USER). so non onboarded users can't do anything other than onboard.
