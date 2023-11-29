@@ -36,11 +36,19 @@ import java.util.UUID;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = this.userRepository.getUserByEmail(username);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return user.get();
+    }
+
+    public UserDetails loadUserById(Long id) {
+        Optional<User> user = this.userRepository.getUserById(id);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -59,13 +67,7 @@ public class UserService implements UserDetailsService {
         user.setLastName(googleUserInformation.getLastName());
         user.setPassword(UUID.randomUUID().toString());
         user.setImageUrl(googleUserInformation.getImageUrl());
-        Optional<Role> roleOptional = this.roleRepository.findByName("USER");
-        if (roleOptional.isEmpty()) {
-            throw new NoSuchRoleException("USER");
-        } else {
-            Role role = roleOptional.get();
-            user.addRole(role);
-        }
+        user.addRole(this.roleService.getRoleByName("NON_ONBOARDED_USER_A"));
         this.userRepository.save(user);
         return new DefaultOidcUser(user.getAuthorities(), idToken, userInfo);
     }
@@ -75,12 +77,60 @@ public class UserService implements UserDetailsService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             userRoleDTO.getRoleNames().forEach(roleName -> {
-                Optional<Role> role = this.roleRepository.findByName(roleName);
-                role.ifPresent(user::addRole);
+                try {
+                    user.addRole(this.roleService.getRoleByName(roleName));
+                } catch (NoSuchRoleException e) {
+                    throw new RuntimeException(e);
+                }
             });
             this.userRepository.save(user);
         } else {
             throw new UsernameNotFoundException(userRoleDTO.getEmail());
+        }
+    }
+
+    public String getFirstName(Long id) {
+        Optional<String> firstNameOptional = this.userRepository.getFirstNameById(id);
+        if (firstNameOptional.isPresent()) {
+            return firstNameOptional.get();
+        } else {
+            throw new UsernameNotFoundException(id.toString());
+        }
+    }
+
+    public String getLastName(Long id) {
+        Optional<String> lastNameOptional = this.userRepository.getLastNameById(id);
+        if (lastNameOptional.isPresent()) {
+            return lastNameOptional.get();
+        } else {
+            throw new UsernameNotFoundException(id.toString());
+        }
+    }
+
+    public void updateFirstName(Long id, String firstName) {
+        this.userRepository.updateFirstName(id, firstName);
+    }
+
+    public void updateRole(Long id, String roleName) {
+        User user = (User) this.loadUserById(id);
+        Set<Role> roles = user.getRoles();
+        try {
+            Role onBoardedUserA = this.roleService.getRoleByName("NON_ONBOARDED_USER_A");
+            Role onBoardedUserB = this.roleService.getRoleByName("NON_ONBOARDED_USER_B");
+            Role onBoardedUserC = this.roleService.getRoleByName("NON_ONBOARDED_USER_C");
+            if (roleName.equals("NON_ONBOARDED_USER_B") && roles.contains(onBoardedUserA)) {
+                user.getRoles().remove(onBoardedUserA);
+                user.addRole(onBoardedUserB);
+            } else if (roleName.equals("NON_ONBOARDED_USER_C") && roles.contains(onBoardedUserB)) {
+                user.getRoles().remove(onBoardedUserB);
+                user.addRole(onBoardedUserC);
+            } else if (roleName.equals("USER") && roles.contains(onBoardedUserC)) {
+                Role userRole = this.roleService.getRoleByName("USER");
+                user.getRoles().remove(onBoardedUserC);
+                user.addRole(userRole);
+            }
+        } catch (NoSuchRoleException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

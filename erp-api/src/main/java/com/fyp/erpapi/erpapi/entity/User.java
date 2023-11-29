@@ -60,6 +60,7 @@ public class User implements UserDetails{
         this.roles.add(role);
     }
 
+
     @Override
     public String getPassword() {
         return password;

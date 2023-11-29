@@ -25,6 +25,14 @@ public class RoleService {
         return savedRole.getId();
     }
 
+    public Role getRoleByName(String roleName) throws NoSuchRoleException {
+        Optional<Role> roleOptional = this.roleRepository.findByName(roleName);
+        if (roleOptional.isEmpty()) {
+            throw new NoSuchRoleException(roleName);
+        }
+        return roleOptional.get();
+    }
+
     public void assignAuthorityToRole(RoleAuthoritiesDTO roleAuthoritiesDTO) throws NoSuchRoleException {
         Optional<Role> roleOptional = roleRepository.findByName(roleAuthoritiesDTO.getRoleName());
         if (roleOptional.isPresent()) {
