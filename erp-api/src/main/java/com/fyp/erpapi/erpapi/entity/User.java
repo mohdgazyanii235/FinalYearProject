@@ -41,6 +41,9 @@ public class User implements UserDetails{
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Company company;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();

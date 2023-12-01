@@ -4,6 +4,8 @@ import com.fyp.erpapi.erpapi.data.CreateCompanyDTO;
 import com.fyp.erpapi.erpapi.data.OnBoardingCompleteDTO;
 import com.fyp.erpapi.erpapi.data.UserInfoDTO;
 import com.fyp.erpapi.erpapi.entity.User;
+import com.fyp.erpapi.erpapi.exception.AlreadyExistsException;
+import com.fyp.erpapi.erpapi.service.CompanyService;
 import com.fyp.erpapi.erpapi.service.CustomGrantedAuthority;
 import com.fyp.erpapi.erpapi.service.UserService;
 import lombok.AllArgsConstructor;
@@ -29,9 +31,10 @@ public class OnboardingController {
      */
 
     private final UserService userService;
+    private final CompanyService companyService;
 
     @PreAuthorize("hasRole('NON_ONBOARDED_USER_A')")
-    @PostMapping(path = "update/userInfo", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/update/userInfo", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateUserInfo(@RequestBody UserInfoDTO userInfoDTO) {
         Long id = userInfoDTO.getId();
         String firstName = userInfoDTO.getFirstName();
@@ -52,17 +55,17 @@ public class OnboardingController {
         }
     }
 
-    // TODO - Create Company Table to add functionality here.
     @PreAuthorize("hasRole('NON_ONBOARDED_USER_B')")
-    @PostMapping(path = "update/createCompany", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> createCompany(CreateCompanyDTO createCompanyDTO) {
-        this.userService.updateRole(createCompanyDTO.getId(), "ROLE_NON_ONBOARDED_USER_C");
+    @PostMapping(path = "/createCompany", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> createCompany(CreateCompanyDTO createCompanyDTO) throws AlreadyExistsException {
+        this.companyService.createCompany(createCompanyDTO);
+        this.userService.updateRole(createCompanyDTO.getAdminId(), "ROLE_NON_ONBOARDED_USER_C");
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasRole('NON_ONBOARDED_USER_C')")
-    @PostMapping(path = "update/onBoardingComplete", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> createCompany(OnBoardingCompleteDTO onBoardingCompleteDTO) {
+    @PostMapping(path = "/onboardingComplete", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> completeOnboarding(OnBoardingCompleteDTO onBoardingCompleteDTO) {
         // TODO - Add functionality to to validate this request. Is the user ready to complete onboarding?
         this.userService.updateRole(onBoardingCompleteDTO.getId(), "USER");
         return ResponseEntity.ok().build();

@@ -133,4 +133,8 @@ public class UserService implements UserDetailsService {
             System.out.println(e.getMessage());
         }
     }
+
+    public void saveUser(User user) {
+        this.userRepository.save(user);
+    }
 }
