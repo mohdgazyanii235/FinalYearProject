@@ -77,3 +77,8 @@
   - This means that after onboarding, the user won't be able to change certain details.
   - I have done this to show step by step secure onboarding process
 - Once the user has completed onboarding, they will get the role (USER). so non onboarded users can't do anything other than onboard.
+
+### 2nd December 2023:
+- I have completed the company set up
+- I have also completed a basic implementation of the onboarding process.
+- I have shown a demonstration of role based access control.
