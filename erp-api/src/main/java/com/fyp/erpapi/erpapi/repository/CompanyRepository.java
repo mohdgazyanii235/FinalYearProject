@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     Boolean existsByName(String name);
-
+    Company findByName(String name);
 }

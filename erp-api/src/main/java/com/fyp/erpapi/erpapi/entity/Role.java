@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -31,4 +32,13 @@ public class Role {
     public Role(String name) {
         this.name = name;
     }
+
+    public void addAuthority(Authority authority) {
+        if (this.authorities == null) {
+            this.authorities = new HashSet<>();
+        }
+        this.authorities.add(authority);
+    }
 }
+
+

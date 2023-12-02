@@ -56,6 +56,15 @@ public class User implements UserDetails{
         return grantedAuthorityList;
     }
 
+    public boolean hasRole(String roleName) {
+        if (this.roles == null || this.roles.isEmpty()) {
+            return false;
+        }
+        return this.roles.stream()
+                .anyMatch(role -> role.getName().equals(roleName));
+    }
+
+
     public void addRole(Role role) {
         if (this.roles == null) {
             this.roles = new HashSet<>();
@@ -92,5 +101,17 @@ public class User implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return  ((o instanceof User)
+                && (Objects.equals(this.id, ((User) o).getId()))
+                && (Objects.equals(this.email, ((User) o).getEmail()))
+                && (this.getAuthorities().equals(((User) o).getAuthorities())));
+    }
+
+    public boolean isAdmin() {
+        return (this.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")));
     }
 }

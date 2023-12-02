@@ -1,6 +1,8 @@
 package com.fyp.erpapi.erpapi.service;
 
 import com.fyp.erpapi.erpapi.data.GoogleUserInformation;
+import com.fyp.erpapi.erpapi.data.JoinCompanyDTO;
+import com.fyp.erpapi.erpapi.data.OnBoardingCompleteDTO;
 import com.fyp.erpapi.erpapi.data.UserRoleDTO;
 import com.fyp.erpapi.erpapi.entity.Role;
 import com.fyp.erpapi.erpapi.entity.User;
@@ -37,6 +39,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final CompanyService companyService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -111,30 +114,51 @@ public class UserService implements UserDetailsService {
         this.userRepository.updateFirstName(id, firstName);
     }
 
+    public void updateLastName(Long id, String lastName) {
+        this.userRepository.updateLastName(id, lastName);
+    }
+
     public void updateRole(Long id, String roleName) {
         User user = (User) this.loadUserById(id);
-        Set<Role> roles = user.getRoles();
         try {
             Role onBoardedUserA = this.roleService.getRoleByName("NON_ONBOARDED_USER_A");
             Role onBoardedUserB = this.roleService.getRoleByName("NON_ONBOARDED_USER_B");
             Role onBoardedUserC = this.roleService.getRoleByName("NON_ONBOARDED_USER_C");
-            if (roleName.equals("NON_ONBOARDED_USER_B") && roles.contains(onBoardedUserA)) {
+            if (roleName.equals("NON_ONBOARDED_USER_B") && user.hasRole("NON_ONBOARDED_USER_A")) {
                 user.getRoles().remove(onBoardedUserA);
                 user.addRole(onBoardedUserB);
-            } else if (roleName.equals("NON_ONBOARDED_USER_C") && roles.contains(onBoardedUserB)) {
+            } else if (roleName.equals("NON_ONBOARDED_USER_C") && user.hasRole("NON_ONBOARDED_USER_B")) {
                 user.getRoles().remove(onBoardedUserB);
                 user.addRole(onBoardedUserC);
-            } else if (roleName.equals("USER") && roles.contains(onBoardedUserC)) {
+            } else if (roleName.equals("USER") && user.hasRole("NON_ONBOARDED_USER_C")) {
                 Role userRole = this.roleService.getRoleByName("USER");
                 user.getRoles().remove(onBoardedUserC);
                 user.addRole(userRole);
             }
+            this.userRepository.save(user);
         } catch (NoSuchRoleException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void saveUser(User user) {
+    public void joinCompany(JoinCompanyDTO joinCompanyDTO) throws NoSuchRoleException {
+        User user = (User) this.loadUserById(joinCompanyDTO.getUserId());
+        if (this.companyService.existsByName(joinCompanyDTO.getCompanyName())) {
+            throw new NoSuchRoleException("Company does not exist");
+        }
+        user.setCompany(this.companyService.getCompanyByName(joinCompanyDTO.getCompanyName()));
         this.userRepository.save(user);
+    }
+
+    public void validateOnboardingComplete(OnBoardingCompleteDTO onBoardingCompleteDTO) throws NoSuchRoleException {
+        User user = (User) this.loadUserById(onBoardingCompleteDTO.getId());
+        if (user.getCompany()!=null && user.getFirstName()!=null && user.getLastName()!=null) {
+            user.getRoles().remove(this.roleService.getRoleByName("NON_ONBOARDED_USER_C"));
+            if (!user.isAdmin()) {
+                user.addRole(this.roleService.getRoleByName("USER"));
+            }
+            user.setIsOnboardingComplete(true);
+            this.userRepository.save(user);
+        }
     }
 }

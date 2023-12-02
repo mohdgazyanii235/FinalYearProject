@@ -1,10 +1,12 @@
 package com.fyp.erpapi.erpapi.controller;
 
 import com.fyp.erpapi.erpapi.data.CreateCompanyDTO;
+import com.fyp.erpapi.erpapi.data.JoinCompanyDTO;
 import com.fyp.erpapi.erpapi.data.OnBoardingCompleteDTO;
 import com.fyp.erpapi.erpapi.data.UserInfoDTO;
 import com.fyp.erpapi.erpapi.entity.User;
 import com.fyp.erpapi.erpapi.exception.AlreadyExistsException;
+import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
 import com.fyp.erpapi.erpapi.service.CompanyService;
 import com.fyp.erpapi.erpapi.service.CustomGrantedAuthority;
 import com.fyp.erpapi.erpapi.service.UserService;
@@ -23,13 +25,6 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class OnboardingController {
 
-    /*
-    Following endpoints needed:
-    1) /onboarding/{userId}/userInfo (POST/PUT) giving users the ability to updated things like firstname, lastname, etc.
-    2) /onboarding/{userId}/companyInfo (POST/PUT) giving users the ability to join company and set their position - some functionality of approval to be added here.
-    3) /onboarding/{userId}/profileInfo (POST/PUT) giving users the ability to set their profile picture, etc.
-     */
-
     private final UserService userService;
     private final CompanyService companyService;
 
@@ -44,10 +39,10 @@ public class OnboardingController {
                 this.userService.updateFirstName(id, firstName);
             }
             if (lastName != null && !lastName.isEmpty() && !lastName.equals(this.userService.getLastName(id))) {
-                this.userService.updateFirstName(id, lastName);
+                this.userService.updateLastName(id, lastName);
             }
 
-            this.userService.updateRole(id, "ROLE_NON_ONBOARDED_USER_B");
+            this.userService.updateRole(id, "NON_ONBOARDED_USER_B");
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
@@ -56,17 +51,27 @@ public class OnboardingController {
     }
 
     @PreAuthorize("hasRole('NON_ONBOARDED_USER_B')")
-    @PostMapping(path = "/createCompany", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> createCompany(CreateCompanyDTO createCompanyDTO) throws AlreadyExistsException {
-        this.companyService.createCompany(createCompanyDTO);
-        this.userService.updateRole(createCompanyDTO.getAdminId(), "ROLE_NON_ONBOARDED_USER_C");
+    @PostMapping(path = "/joinCompany", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> joinCompany(@RequestBody JoinCompanyDTO joinCompanyDTO) throws NoSuchRoleException {
+        this.userService.joinCompany(joinCompanyDTO);
+        this.userService.updateRole(joinCompanyDTO.getUserId(), "NON_ONBOARDED_USER_C");
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('NON_ONBOARDED_USER_B')")
+    @PostMapping(path = "/createCompany", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> createCompany(@RequestBody CreateCompanyDTO createCompanyDTO) throws AlreadyExistsException {
+        this.companyService.createCompany(createCompanyDTO);
+        this.userService.updateRole(createCompanyDTO.getAdminId(), "NON_ONBOARDED_USER_C");
+        return ResponseEntity.ok().build();
+    }
+
+
     @PreAuthorize("hasRole('NON_ONBOARDED_USER_C')")
     @PostMapping(path = "/onboardingComplete", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> completeOnboarding(OnBoardingCompleteDTO onBoardingCompleteDTO) {
+    public ResponseEntity<?> completeOnboarding(@RequestBody OnBoardingCompleteDTO onBoardingCompleteDTO) throws NoSuchRoleException {
         // TODO - Add functionality to to validate this request. Is the user ready to complete onboarding?
+        this.userService.validateOnboardingComplete(onBoardingCompleteDTO);
         this.userService.updateRole(onBoardingCompleteDTO.getId(), "USER");
         return ResponseEntity.ok().build();
     }

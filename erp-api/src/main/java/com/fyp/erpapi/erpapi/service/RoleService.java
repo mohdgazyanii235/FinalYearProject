@@ -4,11 +4,15 @@ import com.fyp.erpapi.erpapi.data.RoleAuthoritiesDTO;
 import com.fyp.erpapi.erpapi.data.RoleDTO;
 import com.fyp.erpapi.erpapi.entity.Authority;
 import com.fyp.erpapi.erpapi.entity.Role;
+import com.fyp.erpapi.erpapi.entity.User;
 import com.fyp.erpapi.erpapi.exception.NoSuchAuthorityException;
 import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
 import com.fyp.erpapi.erpapi.repository.AuthorityRepository;
 import com.fyp.erpapi.erpapi.repository.RoleRepository;
+import com.fyp.erpapi.erpapi.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,6 +23,17 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
     private final AuthorityRepository authorityRepository;
+    private final UserRepository userRepository;
+
+//    This function is bad practice. It will be removed and a better solution will be implemented when the time comes.
+//    It has been put in place to resolve circular dependencies.
+    private UserDetails loadUserById(Long id) {
+        Optional<User> user = this.userRepository.getUserById(id);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return user.get();
+    }
 
     public Long createAndReturnRoleId(RoleDTO roleDTO) {
         Role savedRole = roleRepository.save(new Role(roleDTO.getName()));

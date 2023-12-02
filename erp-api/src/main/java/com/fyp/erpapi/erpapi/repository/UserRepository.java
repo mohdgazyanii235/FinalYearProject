@@ -1,14 +1,16 @@
 package com.fyp.erpapi.erpapi.repository;
 
 import com.fyp.erpapi.erpapi.entity.User;
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Repository
+@Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> getUserByEmail(String email);
 
@@ -17,11 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.isOnboardingComplete FROM User u WHERE u.email = ?1")
     Boolean isOnboardingCompleteByEmail(String email);
 
-    @Transactional
+    @Modifying
     @Query("UPDATE User u SET u.firstName=?2 WHERE u.id=?1")
     void updateFirstName(Long id, String firstName);
 
-    @Transactional
+    @Modifying
     @Query("UPDATE User u SET u.lastName=?2 WHERE u.id=?1")
     void updateLastName(Long id, String lastName);
 
