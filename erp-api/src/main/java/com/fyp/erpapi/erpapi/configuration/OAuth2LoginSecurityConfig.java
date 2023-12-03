@@ -48,9 +48,7 @@ public class OAuth2LoginSecurityConfig {
                                 .oidcUserService(customOIDCUserService))
                         .successHandler(new CustomAuthenticationSuccessHandler(userService)))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             log.info("Access denied: " + accessDeniedException.getMessage());

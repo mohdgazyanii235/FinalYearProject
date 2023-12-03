@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class JoinCompanyDTO {
 
-    private Long userId;
+    private String email;
 
     private String companyName;
 

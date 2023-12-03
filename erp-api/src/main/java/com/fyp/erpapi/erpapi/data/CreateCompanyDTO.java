@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CreateCompanyDTO {
 
-    private Long adminId;
+    private String email;
     private String name;
     private String address;
 }

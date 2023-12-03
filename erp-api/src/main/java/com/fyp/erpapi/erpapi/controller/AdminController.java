@@ -10,22 +10,13 @@ import com.fyp.erpapi.erpapi.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
 @AllArgsConstructor
 public class AdminController {
 
-    /*
-    1) Create new Authorities
-    2) Create new Roles
-    3) Assign Authorities to Roles
-    4) Assign Roles to Users
-     */
 
     private final AuthorityService authorityService;
     private final RoleService roleService;
@@ -55,8 +46,9 @@ public class AdminController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/assignRoleToUser")
-    public ResponseEntity<?> assignRoleToUser(@RequestBody UserRoleDTO userRoleDTO) {
+    @PostMapping("/assignRoleToUser?userEmail={userEmail}")
+    public ResponseEntity<?> assignRoleToUser(@RequestBody UserRoleDTO userRoleDTO, @PathVariable String userEmail) {
+        userRoleDTO.setEmail(userEmail); // Doing this to prevent a major security flaw will be described in the report.
         try {
             this.userService.assignRolesToUser(userRoleDTO);
             return ResponseEntity.ok().build();

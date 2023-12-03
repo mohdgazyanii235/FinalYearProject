@@ -82,3 +82,14 @@
 - I have completed the company set up
 - I have also completed a basic implementation of the onboarding process.
 - I have shown a demonstration of role based access control.
+
+### 3rd December 2023:
+- I had introduces a major security issue yesterday where user could onboard another user.
+- Fixed this issue by looking at security context holder and how it works.
+- Research on this was quite intense as I had to get back to basics.
+- The issue has now been fixed completely.
+- I have to now have some security feature such that an admin can do tasks in his own company.
+- This means I want to create annotations that check specifically for that. The reason I want to do that with annotations is because I want that done before the endpoint is hit, and it makes the code look smoother.
+- Another issue that I had introduced with the RBAC based onboarding process was that every time a users role progressed, they authentication token would change and hence the logged-in users session would be lost.
+- I have fixed this issue by creating a new authentication instance for the currently logged-in user and replacing that in the security context with the old authentication instance.
+- The only thing that is different in the new authentication instance is the new granted authorities.

@@ -20,16 +20,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean isOnboardingCompleteByEmail(String email);
 
     @Modifying
-    @Query("UPDATE User u SET u.firstName=?2 WHERE u.id=?1")
-    void updateFirstName(Long id, String firstName);
+    @Query("UPDATE User u SET u.firstName=?2 WHERE u.email=?1")
+    void updateFirstName(String email, String firstName);
 
     @Modifying
-    @Query("UPDATE User u SET u.lastName=?2 WHERE u.id=?1")
-    void updateLastName(Long id, String lastName);
+    @Query("UPDATE User u SET u.lastName=?2 WHERE u.email=?1")
+    void updateLastName(String email, String lastName);
 
     @Query("SELECT u.firstName FROM User u WHERE u.id = ?1")
     Optional<String> getFirstNameById(Long id);
 
     @Query("SELECT u.lastName FROM User u WHERE u.id = ?1")
     Optional<String> getLastNameById(Long id);
+
+    @Query("SELECT u.firstName FROM User u WHERE u.email = ?1")
+    Optional<String> getFirstNameByEmail(String email);
+
+    @Query("SELECT u.lastName FROM User u WHERE u.email = ?1")
+    Optional<String> getLastNameByEmail(String email);
 }

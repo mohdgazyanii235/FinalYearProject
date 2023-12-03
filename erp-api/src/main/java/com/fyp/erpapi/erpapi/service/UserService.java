@@ -13,9 +13,12 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -92,34 +95,34 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public String getFirstName(Long id) {
-        Optional<String> firstNameOptional = this.userRepository.getFirstNameById(id);
+    public String getFirstName(String email) {
+        Optional<String> firstNameOptional = this.userRepository.getFirstNameByEmail(email);
         if (firstNameOptional.isPresent()) {
             return firstNameOptional.get();
         } else {
-            throw new UsernameNotFoundException(id.toString());
+            throw new UsernameNotFoundException(email);
         }
     }
 
-    public String getLastName(Long id) {
-        Optional<String> lastNameOptional = this.userRepository.getLastNameById(id);
+    public String getLastName(String email) {
+        Optional<String> lastNameOptional = this.userRepository.getLastNameByEmail(email);
         if (lastNameOptional.isPresent()) {
             return lastNameOptional.get();
         } else {
-            throw new UsernameNotFoundException(id.toString());
+            throw new UsernameNotFoundException(email);
         }
     }
 
-    public void updateFirstName(Long id, String firstName) {
-        this.userRepository.updateFirstName(id, firstName);
+    public void updateFirstName(String email, String firstName) {
+        this.userRepository.updateFirstName(email, firstName);
     }
 
-    public void updateLastName(Long id, String lastName) {
-        this.userRepository.updateLastName(id, lastName);
+    public void updateLastName(String email, String lastName) {
+        this.userRepository.updateLastName(email, lastName);
     }
 
-    public void updateRole(Long id, String roleName) {
-        User user = (User) this.loadUserById(id);
+    public void updateRole(String email, String roleName) {
+        User user = (User) this.loadUserByUsername(email);
         try {
             Role onBoardedUserA = this.roleService.getRoleByName("NON_ONBOARDED_USER_A");
             Role onBoardedUserB = this.roleService.getRoleByName("NON_ONBOARDED_USER_B");
@@ -135,6 +138,9 @@ public class UserService implements UserDetailsService {
                 user.getRoles().remove(onBoardedUserC);
                 user.addRole(userRole);
             }
+            OAuth2AuthenticationToken currentAuthenticationToken = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+            OAuth2AuthenticationToken newAuthenticationToken = new OAuth2AuthenticationToken(currentAuthenticationToken.getPrincipal(), user.getAuthorities(), currentAuthenticationToken.getAuthorizedClientRegistrationId());
+            SecurityContextHolder.getContext().setAuthentication(newAuthenticationToken);
             this.userRepository.save(user);
         } catch (NoSuchRoleException e) {
             System.out.println(e.getMessage());
@@ -142,7 +148,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void joinCompany(JoinCompanyDTO joinCompanyDTO) throws NoSuchRoleException {
-        User user = (User) this.loadUserById(joinCompanyDTO.getUserId());
+        User user = (User) this.loadUserByUsername(joinCompanyDTO.getEmail());
         if (this.companyService.existsByName(joinCompanyDTO.getCompanyName())) {
             throw new NoSuchRoleException("Company does not exist");
         }
@@ -151,7 +157,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void validateOnboardingComplete(OnBoardingCompleteDTO onBoardingCompleteDTO) throws NoSuchRoleException {
-        User user = (User) this.loadUserById(onBoardingCompleteDTO.getId());
+        User user = (User) this.loadUserByUsername(onBoardingCompleteDTO.getEmail());
         if (user.getCompany()!=null && user.getFirstName()!=null && user.getLastName()!=null) {
             user.getRoles().remove(this.roleService.getRoleByName("NON_ONBOARDED_USER_C"));
             if (!user.isAdmin()) {
