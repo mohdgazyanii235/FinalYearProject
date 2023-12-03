@@ -93,3 +93,4 @@
 - Another issue that I had introduced with the RBAC based onboarding process was that every time a users role progressed, they authentication token would change and hence the logged-in users session would be lost.
 - I have fixed this issue by creating a new authentication instance for the currently logged-in user and replacing that in the security context with the old authentication instance.
 - The only thing that is different in the new authentication instance is the new granted authorities.
+- I have now also completed the role based access control POC. I can now prepare for demo.

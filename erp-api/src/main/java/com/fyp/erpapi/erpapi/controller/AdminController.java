@@ -1,5 +1,7 @@
 package com.fyp.erpapi.erpapi.controller;
 
+import com.fyp.erpapi.erpapi.annotation.AdminActionAuthorize;
+import com.fyp.erpapi.erpapi.annotation.AdminActionType;
 import com.fyp.erpapi.erpapi.data.AuthorityDTO;
 import com.fyp.erpapi.erpapi.data.RoleAuthoritiesDTO;
 import com.fyp.erpapi.erpapi.data.RoleDTO;
@@ -22,18 +24,21 @@ public class AdminController {
     private final RoleService roleService;
     private final UserService userService;
 
+    @AdminActionAuthorize(actionSubjectEmail = "userEmail", actionType = AdminActionType.WRITE_AUTHORITIES)
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/createNewAuthority")
     public ResponseEntity<?> createNewAuthority(@RequestBody AuthorityDTO authorityDTO) {
         return ResponseEntity.ok(authorityService.createAndReturnAuthorityId(authorityDTO));
     }
 
+    @AdminActionAuthorize(actionSubjectEmail = "userEmail", actionType = AdminActionType.WRITE_ROLES)
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/createNewRole")
     public ResponseEntity<?> createNewRole(@RequestBody RoleDTO roleDTO) {
         return ResponseEntity.ok(roleService.createAndReturnRoleId(roleDTO));
     }
 
+    @AdminActionAuthorize(actionSubjectEmail = "userEmail", actionType = AdminActionType.WRITE_ROLES)
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assignAuthorityToRole")
     public ResponseEntity<?> assignAuthorityToRole(@RequestBody RoleAuthoritiesDTO roleAuthoritiesDTO) {
@@ -45,6 +50,8 @@ public class AdminController {
         }
     }
 
+
+    @AdminActionAuthorize(actionSubjectEmail = "userEmail", actionType = AdminActionType.WRITE_ROLES)
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assignRoleToUser?userEmail={userEmail}")
     public ResponseEntity<?> assignRoleToUser(@RequestBody UserRoleDTO userRoleDTO, @PathVariable String userEmail) {

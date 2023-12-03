@@ -6,7 +6,9 @@ import com.fyp.erpapi.erpapi.data.OnBoardingCompleteDTO;
 import com.fyp.erpapi.erpapi.data.UserInfoDTO;
 import com.fyp.erpapi.erpapi.entity.User;
 import com.fyp.erpapi.erpapi.exception.AlreadyExistsException;
+import com.fyp.erpapi.erpapi.exception.NoSuchCompanyException;
 import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
+import com.fyp.erpapi.erpapi.service.AdminService;
 import com.fyp.erpapi.erpapi.service.CompanyService;
 import com.fyp.erpapi.erpapi.service.UserService;
 import lombok.AllArgsConstructor;
@@ -23,7 +25,8 @@ import org.springframework.web.bind.annotation.*;
 public class OnboardingController {
 
     private final UserService userService;
-    private final CompanyService companyService;
+    private final AdminService adminService;
+
 
     @PreAuthorize("#email == authentication.principal.attributes['email'] && hasRole('NON_ONBOARDED_USER_A')")
     @GetMapping(path = "/test/{email}")
@@ -58,7 +61,8 @@ public class OnboardingController {
 
     @PreAuthorize("#email == authentication.principal.attributes['email'] && hasRole('NON_ONBOARDED_USER_B')")
     @PostMapping(path = "/{email}/joinCompany", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> joinCompany(@RequestBody JoinCompanyDTO joinCompanyDTO, @PathVariable String email) throws NoSuchRoleException {
+    public ResponseEntity<?> joinCompany(@RequestBody JoinCompanyDTO joinCompanyDTO, @PathVariable String email) throws NoSuchRoleException, NoSuchCompanyException {
+        joinCompanyDTO.setEmail(email);
         this.userService.joinCompany(joinCompanyDTO);
         this.userService.updateRole(email, "NON_ONBOARDED_USER_C");
         return ResponseEntity.ok().build();
@@ -68,7 +72,7 @@ public class OnboardingController {
     @PostMapping(path = "/{email}/createCompany", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createCompany(@RequestBody CreateCompanyDTO createCompanyDTO, @PathVariable String email) throws AlreadyExistsException {
         createCompanyDTO.setEmail(email);
-        this.companyService.createCompany(createCompanyDTO);
+        this.adminService.createCompany(createCompanyDTO);
         this.userService.updateRole(email, "NON_ONBOARDED_USER_C");
         return ResponseEntity.ok().build();
     }

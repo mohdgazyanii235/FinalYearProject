@@ -56,6 +56,16 @@ public class User implements UserDetails{
         return grantedAuthorityList;
     }
 
+    public boolean hasAuthority(String authority) {
+        for (GrantedAuthority grantedAuthority : this.getAuthorities()) {
+            CustomGrantedAuthority customGrantedAuthority = (CustomGrantedAuthority) grantedAuthority;
+            if (customGrantedAuthority.getAuthority().equals(authority)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean hasRole(String roleName) {
         if (this.roles == null || this.roles.isEmpty()) {
             return false;

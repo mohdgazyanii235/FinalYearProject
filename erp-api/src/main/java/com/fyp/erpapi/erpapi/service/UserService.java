@@ -6,6 +6,7 @@ import com.fyp.erpapi.erpapi.data.OnBoardingCompleteDTO;
 import com.fyp.erpapi.erpapi.data.UserRoleDTO;
 import com.fyp.erpapi.erpapi.entity.Role;
 import com.fyp.erpapi.erpapi.entity.User;
+import com.fyp.erpapi.erpapi.exception.NoSuchCompanyException;
 import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
 import com.fyp.erpapi.erpapi.repository.RoleRepository;
 import com.fyp.erpapi.erpapi.repository.UserRepository;
@@ -147,10 +148,10 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void joinCompany(JoinCompanyDTO joinCompanyDTO) throws NoSuchRoleException {
+    public void joinCompany(JoinCompanyDTO joinCompanyDTO) throws NoSuchRoleException, NoSuchCompanyException {
         User user = (User) this.loadUserByUsername(joinCompanyDTO.getEmail());
-        if (this.companyService.existsByName(joinCompanyDTO.getCompanyName())) {
-            throw new NoSuchRoleException("Company does not exist");
+        if (this.companyService.getCompanyByName(joinCompanyDTO.getCompanyName()) == null) {
+            throw new NoSuchCompanyException("Company does not exist");
         }
         user.setCompany(this.companyService.getCompanyByName(joinCompanyDTO.getCompanyName()));
         this.userRepository.save(user);
