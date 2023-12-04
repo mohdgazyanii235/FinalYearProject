@@ -13,7 +13,7 @@ and hence will have endpoints and roles based on that.
 
 ## Running and Setup
 - The project is maven based spring boot project and can be run with a simple spring boot run config as below:
-![](./documentation/figures/Run Configuration.PNG)
+![](./documentation/figures/Run%20Configuration.PNG)
 - For the project to run properly as of this submission the active-profile need to be set as 'dev'.
 - A database named 'human_capital_management' needs to be set up as well, this database will make sure that data is persisted on the server.
 - Finally, for obvious security reason, environment variables need to be set up to save client_id and client_secret values.
@@ -25,8 +25,8 @@ and hence will have endpoints and roles based on that.
   - Postman:
     - Postman is a tool that essentially acts like the browser and is able to send and receive HTTP requests/ response to/from the webserver.
     - There are some intricate security configurations that have been created for Postman to work but those will be described in the interim report.
-    - For running authenticated requests from postman to we need to authenticate first from the browser, then steal the session data (cookie) and put in into postman. This is shown below:
-    ![](./documentation/figures/Cookie Stealing.PNG)
+      - For running authenticated requests from postman to we need to authenticate first from the browser, then steal the session data (cookie) and put in into postman. This is shown below:
+      - ![](./documentation/figures/Cookie%20Stealing.PNG)
     - The cookie value is logged onto the console using a custom logging filter that I have created. This is what we need to steal.
     - Using the authenticated cookie, we can easily create REST API requests to and from the server using Postman.
 - It is important to remember that the application configuration states the database will "create" on runtime. This means that the database will start fresh everytime.
