@@ -94,3 +94,9 @@
 - I have fixed this issue by creating a new authentication instance for the currently logged-in user and replacing that in the security context with the old authentication instance.
 - The only thing that is different in the new authentication instance is the new granted authorities.
 - I have now also completed the role based access control POC. I can now prepare for demo.
+
+### 4th December 2023:
+- There was a bug in user service in the "getFirstNameByEmail" function which returned an error if the users firstname was null. Fixed that!
+- Updated README.MD so it says something meaningful.
+- Removed unnecessary logging features from the custom logging filter.
+- Code is now ready for Interim Review

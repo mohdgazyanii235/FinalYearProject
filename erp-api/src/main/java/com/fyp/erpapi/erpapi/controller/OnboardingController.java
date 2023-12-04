@@ -4,19 +4,16 @@ import com.fyp.erpapi.erpapi.data.CreateCompanyDTO;
 import com.fyp.erpapi.erpapi.data.JoinCompanyDTO;
 import com.fyp.erpapi.erpapi.data.OnBoardingCompleteDTO;
 import com.fyp.erpapi.erpapi.data.UserInfoDTO;
-import com.fyp.erpapi.erpapi.entity.User;
 import com.fyp.erpapi.erpapi.exception.AlreadyExistsException;
 import com.fyp.erpapi.erpapi.exception.NoSuchCompanyException;
 import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
 import com.fyp.erpapi.erpapi.service.AdminService;
-import com.fyp.erpapi.erpapi.service.CompanyService;
 import com.fyp.erpapi.erpapi.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +25,7 @@ public class OnboardingController {
     private final AdminService adminService;
 
 
-    @PreAuthorize("#email == authentication.principal.attributes['email'] && hasRole('NON_ONBOARDED_USER_A')")
+
     @GetMapping(path = "/test/{email}")
     public ResponseEntity<?> test(@PathVariable String email) {
         DefaultOidcUser oidcUser = (DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

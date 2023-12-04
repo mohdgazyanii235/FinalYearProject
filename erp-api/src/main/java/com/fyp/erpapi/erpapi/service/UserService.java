@@ -98,20 +98,12 @@ public class UserService implements UserDetailsService {
 
     public String getFirstName(String email) {
         Optional<String> firstNameOptional = this.userRepository.getFirstNameByEmail(email);
-        if (firstNameOptional.isPresent()) {
-            return firstNameOptional.get();
-        } else {
-            throw new UsernameNotFoundException(email);
-        }
+        return firstNameOptional.orElse(null);
     }
 
     public String getLastName(String email) {
         Optional<String> lastNameOptional = this.userRepository.getLastNameByEmail(email);
-        if (lastNameOptional.isPresent()) {
-            return lastNameOptional.get();
-        } else {
-            throw new UsernameNotFoundException(email);
-        }
+        return lastNameOptional.orElse(null);
     }
 
     public void updateFirstName(String email, String firstName) {

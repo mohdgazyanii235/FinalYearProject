@@ -27,9 +27,6 @@ public class CustomOIDCUserService extends OidcUserService {
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
         OidcUser oidcUser = super.loadUser(userRequest);
-        System.out.println("Attributes: " + oidcUser.getAttributes());
-        System.out.println("Claims: " + oidcUser.getClaims());
-        System.out.println("UserInfo: " + oidcUser.getUserInfo());
         GoogleUserInformation googleUserInformation = new GoogleUserInformation(oidcUser.getAttributes());
         Optional<User> userOptional = userRepository.getUserByEmail(googleUserInformation.getEmail());
         if (userOptional.isEmpty()) {

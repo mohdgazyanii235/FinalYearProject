@@ -18,11 +18,10 @@ public class RequestLoggingFilter implements Filter {
     }
 
     private void logRequest(HttpServletRequest httpServletRequest) {
-        System.out.println("Request Method: " + httpServletRequest.getMethod());
-        System.out.println("Request URI: " + httpServletRequest.getRequestURI());
-        System.out.println("Authorization: " + httpServletRequest.getHeader("Authorization"));
         Collections.list(httpServletRequest.getHeaderNames()).forEach(headerName -> {
-            System.out.println(headerName + ": " + httpServletRequest.getHeader(headerName));
+            if (headerName.contains("cookie")) {
+                System.out.println(headerName + ": " + httpServletRequest.getHeader(headerName));
+            }
         });
     }
 }
