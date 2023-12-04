@@ -36,3 +36,5 @@ build/
 ### Documentation ###
 documentation/**
 !documentation/Software Requirements Document.pdf
+!documentation/figures
+!documentation/figures/**
