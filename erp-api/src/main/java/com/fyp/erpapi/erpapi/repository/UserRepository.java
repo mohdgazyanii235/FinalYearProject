@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> getUserByEmail(String email);
 
+
     Optional<User> getUserById(Long id);
 
     @Query("SELECT u.isOnboardingComplete FROM User u WHERE u.email = ?1")

@@ -100,3 +100,11 @@
 - Updated README.MD so it says something meaningful.
 - Removed unnecessary logging features from the custom logging filter.
 - Code is now ready for Interim Review
+
+
+### 10th February 2024:
+- Was carried away catching up notes from last term and getting ready for the exam.
+- I will now focus on the frontend of the application and make things look slightly nicer so the onboarding process can be through the browser rather than using postman
+- For this I need to now learn ReactJs and will start with the following crash course: https://www.youtube.com/watch?v=w7ejDZ8SWv8
+- I have a ReactJs Udemy course that I have used before that I will use to learn very specific details
+- The ReactJs will send HTTP REST API requests to the backend...both the applications will be in the same repository so they can be packaged together later when I set up Docker and everything.
