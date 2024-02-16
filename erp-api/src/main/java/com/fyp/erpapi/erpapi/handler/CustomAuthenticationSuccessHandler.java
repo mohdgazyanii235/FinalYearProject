@@ -23,9 +23,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
         String oidcUserEmail = oidcUser.getAttribute("email");
         if (this.userService.isUserOnboardingComplete(oidcUserEmail)) {
-            response.sendRedirect("/dashboard");
+            response.sendRedirect("http://localhost:3000/dashboard");
         } else {
-            response.sendRedirect("/onboarding");
+            response.sendRedirect("http://localhost:3000/onboarding");
         }
     }
 }

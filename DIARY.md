@@ -108,3 +108,8 @@
 - For this I need to now learn ReactJs and will start with the following crash course: https://www.youtube.com/watch?v=w7ejDZ8SWv8
 - I have a ReactJs Udemy course that I have used before that I will use to learn very specific details
 - The ReactJs will send HTTP REST API requests to the backend...both the applications will be in the same repository so they can be packaged together later when I set up Docker and everything.
+
+
+### 16th February 2024:
+- Currently working on getting some inspiration from : https://www.baeldung.com/spring-security-login-react
+- Turns out, I underestimated how complex it would be to connect frontend to backend securely.
