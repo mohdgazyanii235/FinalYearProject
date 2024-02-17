@@ -113,3 +113,8 @@
 ### 16th February 2024:
 - Currently working on getting some inspiration from : https://www.baeldung.com/spring-security-login-react
 - Turns out, I underestimated how complex it would be to connect frontend to backend securely.
+- All the magic is in the authentication success handler:
+  - When the user logs in, the success handler send the user information to the user this is the UserProfileDataDTO.
+  - This is what I built today!
+- Goals for today have all been met. Backend and frontend connected.
+- Goal for tomorrow is to create a frontend for the user onboarding system.
