@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +29,10 @@ public class CompanyService {
 
     public Company getCompanyByName(String name) {
         return companyRepository.findByName(name);
+    }
+
+    public Set<String> getAllCompanyNames() {
+        return this.companyRepository.getAllCompanyNames();
     }
 
 

@@ -10,6 +10,7 @@ import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
 import com.fyp.erpapi.erpapi.service.AdminService;
 import com.fyp.erpapi.erpapi.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +24,6 @@ public class OnboardingController {
 
     private final UserService userService;
     private final AdminService adminService;
-
 
 
     @GetMapping(path = "/test/{email}")
@@ -40,6 +40,7 @@ public class OnboardingController {
     public ResponseEntity<?> updateUserInfo(@RequestBody UserInfoDTO userInfoDTO, @PathVariable String email) {
         String firstName = userInfoDTO.getFirstName();
         String lastName = userInfoDTO.getLastName();
+        System.out.println(firstName);
         try {
             if (firstName != null && !firstName.isEmpty() && !firstName.equals(this.userService.getFirstName(email))) {
                 this.userService.updateFirstName(email, firstName);

@@ -15,7 +15,4 @@ import java.util.Set;
 @ToString
 public class UserProfileDataDTO {
     private String email;
-    private String firstName;
-    private String lastName;
-    private Collection<CustomGrantedAuthority> roles;
 }

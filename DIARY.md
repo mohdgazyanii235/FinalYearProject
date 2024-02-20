@@ -118,3 +118,11 @@
   - This is what I built today!
 - Goals for today have all been met. Backend and frontend connected.
 - Goal for tomorrow is to create a frontend for the user onboarding system.
+
+### 18th February 2024:
+- I had been having the issue of not being able to read the 'inf' cookie in react - just realised I had set it to HTTP Only Cookie.
+- This issue was easily fixed.
+
+### 20th February 2024:
+- User onboarding system completed
+- A complete and secure user onboarding process with React is now complete. When the user logs in now, they are shown the 'dashboard page!'

@@ -31,16 +31,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
         String oidcUserEmail = oidcUser.getAttribute("email");
+
         UserProfileDataDTO userProfileDataDTO = new UserProfileDataDTO();
+
         userProfileDataDTO.setEmail(oidcUserEmail);
-        userProfileDataDTO.setFirstName(oidcUser.getAttribute("given_name"));
-        userProfileDataDTO.setLastName(oidcUser.getAttribute("family_name"));
-//        TODO: This is an unchecked cast - but I control all aspects of this cast. Will figure out a way to fix this later.
-        userProfileDataDTO.setRoles((Collection<CustomGrantedAuthority>) oidcUser.getAuthorities());
         System.out.println(DataConversionUtil.convertToBase64(userProfileDataDTO));
         Cookie userInfoCookie = new Cookie("inf", DataConversionUtil.convertToBase64(userProfileDataDTO));
-        userInfoCookie.setHttpOnly(true);
-        userInfoCookie.setSecure(true); // use true in production with HTTPS
         userInfoCookie.setPath("/");
         response.addCookie(userInfoCookie);
         response.sendRedirect("http://localhost:3000/");

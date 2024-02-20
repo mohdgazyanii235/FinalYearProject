@@ -54,13 +54,7 @@ public class UserService implements UserDetailsService {
         return user.get();
     }
 
-    public UserDetails loadUserById(Long id) {
-        Optional<User> user = this.userRepository.getUserById(id);
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        return user.get();
-    }
+
 
     public boolean isUserOnboardingComplete(String oidcUserEmail) {
         return this.userRepository.isOnboardingCompleteByEmail(oidcUserEmail);
@@ -139,6 +133,7 @@ public class UserService implements UserDetailsService {
             System.out.println(e.getMessage());
         }
     }
+
 
     public void joinCompany(JoinCompanyDTO joinCompanyDTO) throws NoSuchRoleException, NoSuchCompanyException {
         User user = (User) this.loadUserByUsername(joinCompanyDTO.getEmail());
