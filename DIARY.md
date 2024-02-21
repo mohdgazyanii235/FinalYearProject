@@ -126,3 +126,7 @@
 ### 20th February 2024:
 - User onboarding system completed
 - A complete and secure user onboarding process with React is now complete. When the user logs in now, they are shown the 'dashboard page!'
+- After lots and lots of code an onboarding process that shows a modern authentication process and RBAC is now complete, both backend and frontend
+- The next step in theory should be to move to building more API endpoints (features) but that is not the point of this project, so I will move onto focusing on two main aspects:
+  - The Authorisation Server
+  - Security Analysis and Finding more Secure methods
