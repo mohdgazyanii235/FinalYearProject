@@ -6,6 +6,8 @@ function UserDashboard({ email }) {
 
     const [userDetails, setUserDetails] = useState({ roles: []});
     const userDetailsURL = `${SERVER_URL}/user/get/${email}/userDetails`;
+    const [companyName, setCompanyName] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         fetch(userDetailsURL, {
@@ -18,6 +20,8 @@ function UserDashboard({ email }) {
             .then(response => response.json())
             .then(data => {
                 setUserDetails(data);
+                setCompanyName(data.company.companyName);
+                setIsLoading(false);
             })
             .catch(error => console.error("Error: Can't fetch user details"));
     }, []);
@@ -37,7 +41,7 @@ function UserDashboard({ email }) {
         return (
             <nav className="navbar navbar-expand-lg">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href="#">{userDetails.company.companyName}</a>
+                    <a className="navbar-brand" href="#">{companyName}</a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
                             aria-label="Toggle navigation">

@@ -130,3 +130,17 @@
 - The next step in theory should be to move to building more API endpoints (features) but that is not the point of this project, so I will move onto focusing on two main aspects:
   - The Authorisation Server
   - Security Analysis and Finding more Secure methods
+
+### 11th March 2024:
+- Unfortunately not been able to focus on FYP since I have to catch up on the following things:
+  - Job Applications
+  - My assignments
+  - My business
+  - My personal portfolio
+  - Other side projects
+- I start my coding spree again for the next week:
+  - Following are the goals:
+    - Authorisation server ... read and learn about it.
+    - Build it
+    - Integrate with Microsoft Authenticator app
+    - Implement front end for this!

@@ -9,7 +9,7 @@ function Logout() {
         console.log("logged out")
         localStorage.removeItem("inf");
         localStorage.removeItem("JSESSIONID");
-        window.location.href = window.location; // neat way to refresh
+        window.location.href = window.location;
     });
 }
 
