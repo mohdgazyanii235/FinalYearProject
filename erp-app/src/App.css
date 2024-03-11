@@ -1,0 +1,56 @@
+.App {
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightblue;
+}
+
+.Dashboard {
+  background-color: lightblue;
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+}
+
+.button-container, .onboarding-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 300px;
+  justify-content: center;
+  width: 200px;
+  padding: 50px;
+  border: 5px solid darkcyan;
+  border-radius: 20px;
+}
+
+.login-button {
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+}
+
+.login-button:hover {
+  background-color: #45a049;
+}
+
+
+.logout-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 50px;
+  background-color: darkseagreen;
+  border-radius: 10px;
+  border: 2px solid white;
+  color: darkcyan;
+  font-size: 20px;
+  font-weight: 600;
+}
