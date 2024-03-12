@@ -1,13 +1,13 @@
-package com.fyp.authorisationserver;
+package com.fyp.resourceserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AuthorisationServerApplication {
+public class ResourceServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AuthorisationServerApplication.class, args);
+		SpringApplication.run(ResourceServerApplication.class, args);
 	}
 
 }

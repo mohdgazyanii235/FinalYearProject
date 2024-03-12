@@ -1,10 +1,10 @@
-package com.fyp.authorisationserver;
+package com.fyp.resourceserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthorisationServerApplicationTests {
+class ResourceServerApplicationTests {
 
 	@Test
 	void contextLoads() {
