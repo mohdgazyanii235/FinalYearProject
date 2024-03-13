@@ -49,7 +49,7 @@ public class OAuth2LoginSecurityConfig {
                 .cors(cors -> cors.configurationSource(this.myCorsConfiguration()))
                 .oauth2Login(oauth2 -> oauth2
                         .redirectionEndpoint(redirection -> redirection
-                                .baseUri("/login/oauth2/code/google"))
+                                .baseUri("/login/oauth2/code/auth-server"))
                         .userInfoEndpoint(userInfo -> userInfo
                                 .oidcUserService(customOIDCUserService))
                         .successHandler(new CustomAuthenticationSuccessHandler(userService)))

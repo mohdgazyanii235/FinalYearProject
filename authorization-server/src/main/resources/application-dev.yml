@@ -3,19 +3,31 @@ spring:
     oauth2:
       authorizationserver:
         client:
-          client-1:
+          erp-api:
             registration:
-              client-id: "ERP-API"
-              client-secret: "{bcrypt}$2a$10$jdJGhzsiIqYFpjJiYWMl/eKDOd8vdyQis2aynmFN0dgJ53XvpzzwC"
-              client-authentication-methods: "client_secret_basic"
-              authorization-grant-types: "client_credentials"
-              scopes: "user.read,user.write"
-
+              client-id: "erp-api"
+              client-secret: "{noop}secret"
+              client-authentication-methods: "client_secret_post"
+              authorization-grant-types:
+                - "client_credentials"
+                - "authorization_code"
+                - "refresh_token"
+              scopes:
+                - "openid"
+                - "user.read"
+                - "user.write"
+                - "profile"
+              redirect-uris: "http://localhost:8080/login/oauth2/code/auth-server"
+              post-logout-redirect-uris:
+                - "http://localhost:8080/"
+            require-authorization-consent: true
 
 server:
   port: 8081
+
 logging:
   level:
     org:
       springframework:
-        security: trace
+        security: DEBUG
+        web: DEBUG
