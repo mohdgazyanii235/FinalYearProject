@@ -22,6 +22,7 @@ spring:
                 - "http://localhost:8080/"
             require-authorization-consent: true
 
+
 server:
   port: 8081
 

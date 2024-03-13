@@ -3,6 +3,7 @@ package com.fyp.erpapi.erpapi.configuration;
 import com.fyp.erpapi.erpapi.handler.CustomAuthenticationSuccessHandler;
 import com.fyp.erpapi.erpapi.service.CustomOIDCUserService;
 import com.fyp.erpapi.erpapi.service.UserService;
+import com.fyp.erpapi.erpapi.util.CustomAuthorizationTokenResponseClientForDebugging;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,11 @@ import org.springframework.security.config.annotation.web.configurers.CorsConfig
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -48,6 +52,8 @@ public class OAuth2LoginSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(this.myCorsConfiguration()))
                 .oauth2Login(oauth2 -> oauth2
+                        .tokenEndpoint(tokenEndpointConfig -> tokenEndpointConfig
+                                .accessTokenResponseClient(new CustomAuthorizationTokenResponseClientForDebugging()))
                         .redirectionEndpoint(redirection -> redirection
                                 .baseUri("/login/oauth2/code/auth-server"))
                         .userInfoEndpoint(userInfo -> userInfo
@@ -82,4 +88,13 @@ public class OAuth2LoginSecurityConfig {
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
         return urlBasedCorsConfigurationSource;
     }
+
+    @Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFireWall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedDoubleSlash(true);
+        firewall.setAllowUrlEncodedPercent(true);
+        return firewall;
+    }
+
 }

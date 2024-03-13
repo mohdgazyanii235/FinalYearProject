@@ -17,14 +17,11 @@ spring:
           auth-server:
             client-id: "erp-api"
             client-secret: "secret"
-            redirect-uri: "http://localhost:8080/login/oauth2/code/auth-server"
+            redirect-uri: "{baseUrl}/login/oauth2/code/auth-server"
             authorization-grant-type: "authorization_code"
-            client-authentication-method: "client_secret_basic"
+            client-authentication-method: "client_secret_post"
             scope:
-              - user.read
-              - user.write
               - openid
-              - profile
         provider:
           google:
             authorizationUri: https://accounts.google.com/o/oauth2/auth
@@ -33,10 +30,11 @@ spring:
             userNameAttribute: sub
             jwkSetUri: https://www.googleapis.com/oauth2/v3/certs
           auth-server:
-            issuer-uri: http://localhost:8081
-            authorization-uri: http://localhost:8081/oauth2/authorize
-            token-uri: http://localhost:8081/oauth2/token
-            user-info-uri: http://localhost:8081/userinfo
+            issuer-uri: http://127.0.0.1:8081
+#            authorization-uri: http://localhost:8081/oauth2/authorize
+#            token-uri: http://localhost:8081/oauth2/token
+#            user-info-uri: http://localhost:8081/userinfo
+#            user-name-attribute: sub
   datasource:
     url: jdbc:mysql://localhost:3306/human_capital_management_dev
     username: root

@@ -144,3 +144,7 @@
     - Build it
     - Integrate with Microsoft Authenticator app
     - Implement front end for this!
+
+### 13th March 2024:
+- After 2 days of literally problem solving every waking hour finally managed to get the authorization code exchange between client and auth server work properly!
+- Very happy!!
