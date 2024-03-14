@@ -31,10 +31,12 @@ spring:
             jwkSetUri: https://www.googleapis.com/oauth2/v3/certs
           auth-server:
             issuer-uri: http://127.0.0.1:8081
-#            authorization-uri: http://localhost:8081/oauth2/authorize
-#            token-uri: http://localhost:8081/oauth2/token
-#            user-info-uri: http://localhost:8081/userinfo
-#            user-name-attribute: sub
+#            authorization-uri: http://127.0.0.1:8081/oauth2/authorize
+#            token-uri: http://127.0.0.1:8081/oauth2/token
+#            user-info-uri: http://127.0.0.1:8081/userinfo
+#            jwk-set-uri: http://127.0.0.1:8081/oauth2/jwks
+
+
   datasource:
     url: jdbc:mysql://localhost:3306/human_capital_management_dev
     username: root
