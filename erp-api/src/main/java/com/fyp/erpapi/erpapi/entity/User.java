@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Table(name = "user")
-public class User implements UserDetails{
+public class User implements UserDetails {
 
 
     @Id

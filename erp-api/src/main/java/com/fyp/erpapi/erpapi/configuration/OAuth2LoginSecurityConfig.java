@@ -1,40 +1,31 @@
 package com.fyp.erpapi.erpapi.configuration;
 
+import com.fyp.erpapi.erpapi.exception.UnknownRegistrationIdException;
 import com.fyp.erpapi.erpapi.handler.CustomAuthenticationSuccessHandler;
-import com.fyp.erpapi.erpapi.service.CustomOIDCUserService;
+import com.fyp.erpapi.erpapi.repository.UserRepository;
 import com.fyp.erpapi.erpapi.service.UserService;
+import com.fyp.erpapi.erpapi.service.oidc.GoogleOIDCUserService;
 import com.fyp.erpapi.erpapi.util.CustomAuthorizationTokenResponseClientForDebugging;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.nio.file.AccessDeniedException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @Log4j2
@@ -42,8 +33,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity
 public class OAuth2LoginSecurityConfig {
 
-    private final CustomOIDCUserService customOIDCUserService;
     private final UserService userService;
+    private final UserRepository userRepository;
+
+    private static final String GOOGLE = "google";
+    private static final String AUTH_SERVER = "auth-server";
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -55,9 +49,9 @@ public class OAuth2LoginSecurityConfig {
                         .tokenEndpoint(tokenEndpointConfig -> tokenEndpointConfig
                                 .accessTokenResponseClient(new CustomAuthorizationTokenResponseClientForDebugging()))
                         .redirectionEndpoint(redirection -> redirection
-                                .baseUri("/login/oauth2/code/auth-server"))
+                                .baseUri("/login/oauth2/code/{registrationId}"))
                         .userInfoEndpoint(userInfo -> userInfo
-                                .oidcUserService(customOIDCUserService))
+                                .oidcUserService(this.getOIDCUserService()))
                         .successHandler(new CustomAuthenticationSuccessHandler(userService)))
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
@@ -68,6 +62,20 @@ public class OAuth2LoginSecurityConfig {
                         }))
                 .build();
     }
+
+
+//    Below code essentially returns which oidc user service to use depending on which auth server the user chose
+    private OAuth2UserService<OidcUserRequest, OidcUser> getOIDCUserService() {
+        return (userRequest) -> {
+            if (userRequest.getClientRegistration().getRegistrationId().equals(GOOGLE)) {
+                return new GoogleOIDCUserService(this.userRepository, this.userService).loadUser(userRequest);
+            } else {
+                throw new UnknownRegistrationIdException("Unknown Registration ID");
+            }
+        };
+    }
+
+
 
     @Bean
     ApplicationListener<AuthenticationSuccessEvent> successLogger() {
