@@ -3,6 +3,7 @@ package com.fyp.erpapi.erpapi.service.oidc;
 import com.fyp.erpapi.erpapi.data.OIDCUserInformationDTO;
 import com.fyp.erpapi.erpapi.entity.User;
 import com.fyp.erpapi.erpapi.enumeration.SSOIssuer;
+import com.fyp.erpapi.erpapi.exception.AlreadyExistsException;
 import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
 import com.fyp.erpapi.erpapi.repository.UserRepository;
 import com.fyp.erpapi.erpapi.service.UserService;
@@ -32,7 +33,7 @@ public class GoogleOIDCUserService extends OidcUserService {
         if (userOptional.isEmpty()) {
             try {
                 return userService.registerUser(oidcUserInformationDTO, oidcUser.getIdToken(), oidcUser.getUserInfo(), SSOIssuer.GOOGLE);
-            } catch (NoSuchRoleException e) {
+            } catch (NoSuchRoleException | AlreadyExistsException e) {
                 throw new RuntimeException(e);
             }
         } else {

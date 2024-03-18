@@ -33,7 +33,6 @@ public class UserController {
         return ResponseEntity.ok().body(userDetailsDTO);
     }
 
-
     @GetMapping("/{email}/roles")
     @PreAuthorize("#email == authentication.principal.attributes['email']")
     public ResponseEntity<?> getUserRoles(@PathVariable String email) {

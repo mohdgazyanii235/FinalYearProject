@@ -23,6 +23,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.isOnboardingComplete FROM User u WHERE u.email = ?1")
     Boolean isOnboardingCompleteByEmail(String email);
 
+    Boolean existsByEmail(String email);
+
     @Modifying
     @Query("UPDATE User u SET u.firstName=?2 WHERE u.email=?1")
     void updateFirstName(String email, String firstName);

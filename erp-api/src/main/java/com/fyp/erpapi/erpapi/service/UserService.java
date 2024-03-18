@@ -7,6 +7,7 @@ import com.fyp.erpapi.erpapi.data.UserRoleDTO;
 import com.fyp.erpapi.erpapi.entity.Role;
 import com.fyp.erpapi.erpapi.entity.User;
 import com.fyp.erpapi.erpapi.enumeration.SSOIssuer;
+import com.fyp.erpapi.erpapi.exception.AlreadyExistsException;
 import com.fyp.erpapi.erpapi.exception.NoSuchCompanyException;
 import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
 import com.fyp.erpapi.erpapi.repository.UserRepository;
@@ -48,7 +49,12 @@ public class UserService implements UserDetailsService {
         return this.userRepository.isOnboardingCompleteByEmail(oidcUserEmail);
     }
 
-    public OidcUser registerUser(OIDCUserInformationDTO OIDCUserInformationDTO, OidcIdToken idToken, OidcUserInfo userInfo, SSOIssuer ssoIssuer) throws NoSuchRoleException {
+    public OidcUser registerUser(OIDCUserInformationDTO OIDCUserInformationDTO, OidcIdToken idToken, OidcUserInfo userInfo, SSOIssuer ssoIssuer) throws NoSuchRoleException, AlreadyExistsException {
+
+        if (this.existsByEmail(OIDCUserInformationDTO.getEmail())) {
+            throw new AlreadyExistsException("A user with that email address already exists in the system");
+        }
+
         System.out.println(OIDCUserInformationDTO.getClaims());
         User user = new User();
         user.setEmail(OIDCUserInformationDTO.getEmail());
@@ -143,5 +149,9 @@ public class UserService implements UserDetailsService {
             user.setIsOnboardingComplete(true);
             this.userRepository.save(user);
         }
+    }
+
+    public Boolean existsByEmail(String email) {
+        return this.userRepository.existsByEmail(email);
     }
 }
