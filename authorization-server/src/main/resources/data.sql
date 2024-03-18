@@ -1,0 +1,10 @@
+INSERT INTO authorization_server.user VALUES(1, "user1@example.com", "password1");
+INSERT INTO authorization_server.user VALUES(2, "user2@example.com", "password2");
+INSERT INTO authorization_server.user VALUES(3, "user3@example.com", "password3");
+INSERT INTO authorization_server.user VALUES(4, "user4@example.com", "password4");
+INSERT INTO authorization_server.user VALUES(5, "user5@example.com", "password5");
+INSERT INTO authorization_server.user VALUES(6, "user6@example.com", "password6");
+INSERT INTO authorization_server.user VALUES(7, "user7@example.com", "password7");
+INSERT INTO authorization_server.user VALUES(8, "user8@example.com", "password8");
+INSERT INTO authorization_server.user VALUES(9, "user9@example.com", "password9");
+INSERT INTO authorization_server.user VALUES(10, "user10@example.com", "password10");

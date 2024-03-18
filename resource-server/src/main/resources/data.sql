@@ -1,0 +1,10 @@
+INSERT INTO resource_server.user_information (`id`, `email`, `first_name`, `last_name`, `profile_picture`) VALUES ('1', 'user1@example.com', 'John', 'Doe', 'https://example.com/profiles/user1.jpg');
+INSERT INTO resource_server.user_information (`id`, `email`, `first_name`, `last_name`, `profile_picture`) VALUES ('2', 'user2@example.com', 'Jane', 'Smith', 'https://example.com/profiles/user2.jpg');
+INSERT INTO resource_server.user_information (`id`, `email`, `first_name`, `last_name`, `profile_picture`) VALUES ('3', 'user3@example.com', 'Alex', 'Johnson', 'https://example.com/profiles/user3.jpg');
+INSERT INTO resource_server.user_information (`id`, `email`, `first_name`, `last_name`, `profile_picture`) VALUES ('4', 'user4@example.com', 'Chris', 'Williams', 'https://example.com/profiles/user4.jpg');
+INSERT INTO resource_server.user_information (`id`, `email`, `first_name`, `last_name`, `profile_picture`) VALUES ('5', 'user5@example.com', 'Pat', 'Brown', 'https://example.com/profiles/user5.jpg');
+INSERT INTO resource_server.user_information (`id`, `email`, `first_name`, `last_name`, `profile_picture`) VALUES ('6', 'user6@example.com', 'Taylor', 'Jones', 'https://example.com/profiles/user6.jpg');
+INSERT INTO resource_server.user_information (`id`, `email`, `first_name`, `last_name`, `profile_picture`) VALUES ('7', 'user7@example.com', 'Jordan', 'Miller', 'https://example.com/profiles/user7.jpg');
+INSERT INTO resource_server.user_information (`id`, `email`, `first_name`, `last_name`, `profile_picture`) VALUES ('8', 'user8@example.com', 'Casey', 'Davis', 'https://example.com/profiles/user8.jpg');
+INSERT INTO resource_server.user_information (`id`, `email`, `first_name`, `last_name`, `profile_picture`) VALUES ('9', 'user9@example.com', 'Drew', 'Wilson', 'https://example.com/profiles/user9.jpg');
+INSERT INTO resource_server.user_information (`id`, `email`, `first_name`, `last_name`, `profile_picture`) VALUES ('10', 'user10@example.com', 'Sam', 'Taylor', 'https://example.com/profiles/user10.jpg');
