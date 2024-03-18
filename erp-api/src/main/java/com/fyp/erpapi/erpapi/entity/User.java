@@ -1,5 +1,6 @@
 package com.fyp.erpapi.erpapi.entity;
 
+import com.fyp.erpapi.erpapi.enumeration.SSOIssuer;
 import com.fyp.erpapi.erpapi.service.CustomGrantedAuthority;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -43,6 +44,8 @@ public class User implements UserDetails {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
+
+    private SSOIssuer ssoIssuer;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

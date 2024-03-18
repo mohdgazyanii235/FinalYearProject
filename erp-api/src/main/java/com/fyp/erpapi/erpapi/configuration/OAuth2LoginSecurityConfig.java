@@ -4,6 +4,7 @@ import com.fyp.erpapi.erpapi.exception.UnknownRegistrationIdException;
 import com.fyp.erpapi.erpapi.handler.CustomAuthenticationSuccessHandler;
 import com.fyp.erpapi.erpapi.repository.UserRepository;
 import com.fyp.erpapi.erpapi.service.UserService;
+//import com.fyp.erpapi.erpapi.service.oidc.AuthServerOIDCUserService;
 import com.fyp.erpapi.erpapi.service.oidc.AuthServerOIDCUserService;
 import com.fyp.erpapi.erpapi.service.oidc.GoogleOIDCUserService;
 import com.fyp.erpapi.erpapi.util.CustomAuthorizationTokenResponseClientForDebugging;
@@ -22,6 +23,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -69,9 +71,10 @@ public class OAuth2LoginSecurityConfig {
     private OAuth2UserService<OidcUserRequest, OidcUser> getOIDCUserService() {
         return (userRequest) -> {
             if (userRequest.getClientRegistration().getRegistrationId().equals(GOOGLE)) {
-                return new GoogleOIDCUserService(this.userRepository, this.userService).loadUser(userRequest);
+                return new GoogleOIDCUserService(userRepository, userService).loadUser(userRequest);
             } else if (userRequest.getClientRegistration().getRegistrationId().equals(AUTH_SERVER)) {
-                return new AuthServerOIDCUserService(this.userRepository, this.userService).loadUser(userRequest);
+                return new AuthServerOIDCUserService(userRepository, userService, restTemplate()).loadUser(userRequest);
+//                return new GoogleOIDCUserService(userRepository, userService).loadUser(userRequest);
             } else {
                 throw new UnknownRegistrationIdException("Unknown Registration ID");
             }
@@ -104,6 +107,11 @@ public class OAuth2LoginSecurityConfig {
         firewall.setAllowUrlEncodedDoubleSlash(true);
         firewall.setAllowUrlEncodedPercent(true);
         return firewall;
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.fyp.erpapi.erpapi.repository;
 
 import com.fyp.erpapi.erpapi.entity.User;
+import com.fyp.erpapi.erpapi.enumeration.SSOIssuer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> getUserByEmail(String email);
 
+    @Query("SELECT u FROM User u WHERE u.email = ?1 and u.ssoIssuer = ?2")
+    Optional<User> getRegisteredUserByEmailAndIssuer(String email, SSOIssuer ssoIssuer);
 
     Optional<User> getUserById(Long id);
 

@@ -1,11 +1,17 @@
 package com.fyp.erpapi.erpapi.data;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Map;
 
 @AllArgsConstructor
-public class GoogleUserInformation {
+@NoArgsConstructor
+@Getter
+@Setter
+public class OIDCUserInformationDTO {
 
     private Map<String, Object> attributes;
 

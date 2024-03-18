@@ -11,7 +11,6 @@ spring:
             clientSecret: ${CLIENT_SECRET}
             redirectUri: "{baseUrl}/login/oauth2/code/google"
             scope:
-              - email
               - profile
               - openid
           auth-server:
@@ -22,6 +21,8 @@ spring:
             client-authentication-method: "client_secret_post"
             scope:
               - openid
+              - profile
+              - user.read
         provider:
           google:
             authorizationUri: https://accounts.google.com/o/oauth2/auth
@@ -33,7 +34,7 @@ spring:
             issuer-uri: http://127.0.0.1:8081
 #            authorization-uri: http://127.0.0.1:8081/oauth2/authorize
 #            token-uri: http://127.0.0.1:8081/oauth2/token
-#            user-info-uri: http://127.0.0.1:8081/userinfo
+            user-info-uri: http://localhost:8082/userinfo
 #            jwk-set-uri: http://127.0.0.1:8081/oauth2/jwks
 
 

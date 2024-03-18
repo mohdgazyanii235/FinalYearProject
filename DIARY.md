@@ -146,5 +146,13 @@
     - Implement front end for this!
 
 ### 13th March 2024:
-- After 2 days of literally problem solving every waking hour finally managed to get the authorization code exchange between client and auth server work properly!
+- After 2 days of literally problem-solving every waking hour finally managed to get the authorization code exchange between client and auth server work properly!
 - Very happy!!
+
+### 18th March 2024:
+- Authorization server implementation is basically completed.
+- Resource server demonstration completed as well... Still the passwords in the authorization server are stored in plaintext.
+- Today's security vulnerability that I solved was making sure there was no clash between oidc users... "what if two users with the same email but different authorization servers login?"... exactly!
+  - How I solved this by adding an issuer field for each user in the database... so now, user exists lookup will also check for issuer making each user unique!  
+- Authorization server users are also needing to be stored manually since I haven't really managed to make a registration endpoint there.
+- This might be a luxury for later but for now, users in the resource server and authorization server will be loaded through a CSV file.

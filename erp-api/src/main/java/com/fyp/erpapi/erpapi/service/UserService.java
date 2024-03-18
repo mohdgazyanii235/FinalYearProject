@@ -1,40 +1,28 @@
 package com.fyp.erpapi.erpapi.service;
 
-import com.fyp.erpapi.erpapi.data.GoogleUserInformation;
+import com.fyp.erpapi.erpapi.data.OIDCUserInformationDTO;
 import com.fyp.erpapi.erpapi.data.JoinCompanyDTO;
 import com.fyp.erpapi.erpapi.data.OnBoardingCompleteDTO;
 import com.fyp.erpapi.erpapi.data.UserRoleDTO;
 import com.fyp.erpapi.erpapi.entity.Role;
 import com.fyp.erpapi.erpapi.entity.User;
+import com.fyp.erpapi.erpapi.enumeration.SSOIssuer;
 import com.fyp.erpapi.erpapi.exception.NoSuchCompanyException;
 import com.fyp.erpapi.erpapi.exception.NoSuchRoleException;
-import com.fyp.erpapi.erpapi.repository.RoleRepository;
 import com.fyp.erpapi.erpapi.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.Value;
-import lombok.experimental.NonFinal;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -60,15 +48,16 @@ public class UserService implements UserDetailsService {
         return this.userRepository.isOnboardingCompleteByEmail(oidcUserEmail);
     }
 
-    public OidcUser registerUser(GoogleUserInformation googleUserInformation, OidcIdToken idToken, OidcUserInfo userInfo) throws NoSuchRoleException {
-        System.out.println(googleUserInformation.getClaims());
+    public OidcUser registerUser(OIDCUserInformationDTO OIDCUserInformationDTO, OidcIdToken idToken, OidcUserInfo userInfo, SSOIssuer ssoIssuer) throws NoSuchRoleException {
+        System.out.println(OIDCUserInformationDTO.getClaims());
         User user = new User();
-        user.setEmail(googleUserInformation.getEmail());
-        user.setFirstName(googleUserInformation.getFirstName());
-        user.setLastName(googleUserInformation.getLastName());
+        user.setEmail(OIDCUserInformationDTO.getEmail());
+        user.setFirstName(OIDCUserInformationDTO.getFirstName());
+        user.setLastName(OIDCUserInformationDTO.getLastName());
         user.setPassword(UUID.randomUUID().toString());
-        user.setImageUrl(googleUserInformation.getImageUrl());
+        user.setImageUrl(OIDCUserInformationDTO.getImageUrl());
         user.addRole(this.roleService.getRoleByName("NON_ONBOARDED_USER_A"));
+        user.setSsoIssuer(ssoIssuer);
         this.userRepository.save(user);
         return new DefaultOidcUser(user.getAuthorities(), idToken, userInfo);
     }

@@ -22,8 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = this.userRepository.findUserByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> userOptional = this.userRepository.findUserByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (user.isEnabled() && user.isAccountNonExpired() && user.isCredentialsNonExpired()) {
@@ -33,17 +33,17 @@ public class CustomUserDetailsService implements UserDetailsService {
             }
 
         } else {
-            throw new UsernameNotFoundException("User with name " + username + " doesn't exist in the authorization server");
+            throw new UsernameNotFoundException("User with email " + email + " doesn't exist in the authorization server");
         }
     }
 
     public void registerNewUser(UserRegistrationDTO userRegistrationDTO) throws AlreadyExistsException {
 
-        if (this.userRepository.existsByUsername(userRegistrationDTO.getUsername())) {
-            throw new AlreadyExistsException("Username already exists");
+        if (this.userRepository.existsByEmail(userRegistrationDTO.getEmail())) {
+            throw new AlreadyExistsException("Email already exists");
         } else {
             User newUser = new User();
-            newUser.setUsername(userRegistrationDTO.getUsername());
+            newUser.setEmail(userRegistrationDTO.getEmail());
             newUser.setPassword(passwordEncoder.encode(userRegistrationDTO.getPassword()));
             this.userRepository.save(newUser);
         }
