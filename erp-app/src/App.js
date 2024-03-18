@@ -73,7 +73,6 @@ function App() {
 
     return (
         <div>
-            <button className="logout-button">logout</button>
             {isLoading ? (
                 <div className="App">
                     <p>Loading...</p>

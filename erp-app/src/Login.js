@@ -9,7 +9,7 @@ function Login() {
     return (
         <div className="button-container">
             <button className="login-button" onClick={() => { handleLogin('google') }}>Login with Google</button>
-            <button className="login-button" onClick={() => { console.log("Login with GitHub clicked"); }}>Login with GitHub</button>
+            <button className="login-button" onClick={() => { handleLogin('auth-server'); }}>Login with Auth-Server</button>
         </div>
     );
 }
