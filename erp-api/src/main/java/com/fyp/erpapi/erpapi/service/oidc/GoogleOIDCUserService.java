@@ -27,11 +27,11 @@ public class GoogleOIDCUserService extends OidcUserService {
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
         OidcUser oidcUser = new OidcUserService().loadUser(userRequest);
-        OIDCUserInformationDTO OIDCUserInformationDTO = new OIDCUserInformationDTO(oidcUser.getAttributes());
-        Optional<User> userOptional = userRepository.getRegisteredUserByEmailAndIssuer(OIDCUserInformationDTO.getEmail(), SSOIssuer.GOOGLE);
+        OIDCUserInformationDTO oidcUserInformationDTO = new OIDCUserInformationDTO(oidcUser.getAttributes());
+        Optional<User> userOptional = userRepository.getRegisteredUserByEmailAndIssuer(oidcUserInformationDTO.getEmail(), SSOIssuer.GOOGLE);
         if (userOptional.isEmpty()) {
             try {
-                return userService.registerUser(OIDCUserInformationDTO, oidcUser.getIdToken(), oidcUser.getUserInfo(), SSOIssuer.GOOGLE);
+                return userService.registerUser(oidcUserInformationDTO, oidcUser.getIdToken(), oidcUser.getUserInfo(), SSOIssuer.GOOGLE);
             } catch (NoSuchRoleException e) {
                 throw new RuntimeException(e);
             }

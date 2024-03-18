@@ -13,6 +13,7 @@ spring:
             scope:
               - profile
               - openid
+              - email
           auth-server:
             client-id: "erp-api"
             client-secret: "secret"
