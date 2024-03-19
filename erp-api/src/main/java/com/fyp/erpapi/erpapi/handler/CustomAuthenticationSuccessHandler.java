@@ -22,11 +22,24 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Set;
 
+/**
+ * Custom handler for processing actions upon successful authentication using OIDC.
+ * This includes actions like creating a user information cookie and redirecting
+ * the user to a designated page after successful authentication.
+ */
 @AllArgsConstructor
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final UserService userService;
 
+    /**
+     * Handles actions to be performed once authentication is successful.
+     *
+     * @param request The request associated with the authentication attempt.
+     * @param response The response where the post-authentication actions are written.
+     * @param authentication The authentication object containing the principal (user) details.
+     * @throws IOException if an input or output exception occurs.
+     * @throws ServletException if a servlet exception occurs.
+     */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
