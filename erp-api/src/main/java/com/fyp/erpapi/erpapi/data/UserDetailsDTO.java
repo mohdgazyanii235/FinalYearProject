@@ -1,7 +1,5 @@
 package com.fyp.erpapi.erpapi.data;
 
-import com.fyp.erpapi.erpapi.entity.Company;
-import com.fyp.erpapi.erpapi.entity.Role;
 import com.fyp.erpapi.erpapi.entity.User;
 import com.fyp.erpapi.erpapi.service.CustomGrantedAuthority;
 import lombok.AllArgsConstructor;
@@ -10,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * Data Transfer Object (DTO) encapsulating detailed information about a user.

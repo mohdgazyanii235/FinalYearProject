@@ -5,7 +5,6 @@ import com.fyp.erpapi.erpapi.entity.User;
 import com.fyp.erpapi.erpapi.service.CustomGrantedAuthority;
 import com.fyp.erpapi.erpapi.service.UserService;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**

@@ -4,7 +4,6 @@ import com.fyp.erpapi.erpapi.exception.UnknownRegistrationIdException;
 import com.fyp.erpapi.erpapi.handler.CustomAuthenticationSuccessHandler;
 import com.fyp.erpapi.erpapi.repository.UserRepository;
 import com.fyp.erpapi.erpapi.service.UserService;
-//import com.fyp.erpapi.erpapi.service.oidc.AuthServerOIDCUserService;
 import com.fyp.erpapi.erpapi.service.oidc.AuthServerOIDCUserService;
 import com.fyp.erpapi.erpapi.service.oidc.GoogleOIDCUserService;
 import com.fyp.erpapi.erpapi.util.CustomAuthorizationTokenResponseClientForDebugging;
@@ -69,7 +68,7 @@ public class OAuth2LoginSecurityConfig {
                                 .baseUri("/login/oauth2/code/{registrationId}"))
                         .userInfoEndpoint(userInfo -> userInfo
                                 .oidcUserService(this.getOIDCUserService()))
-                        .successHandler(new CustomAuthenticationSuccessHandler(userService)))
+                        .successHandler(new CustomAuthenticationSuccessHandler()))
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
