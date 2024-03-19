@@ -5,8 +5,8 @@ spring:
         client:
           erp-api:
             registration:
-              client-id: "erp-api"
-              client-secret: "secret"
+              client-id: ${AUTH_SERVER_CLIENT_ID}
+              client-secret: ${AUTH_SERVER_SECRET}
               client-authentication-methods: "client_secret_post"
               authorization-grant-types:
                 - "client_credentials"
@@ -21,6 +21,9 @@ spring:
               post-logout-redirect-uris:
                 - "http://localhost:8080/"
             require-authorization-consent: true
+            token:
+              access-token-time-to-live: 3600s
+
   datasource:
     url: jdbc:mysql://localhost:3306/authorization_server
     username: root
