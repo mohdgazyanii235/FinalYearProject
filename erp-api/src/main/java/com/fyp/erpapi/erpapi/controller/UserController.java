@@ -17,6 +17,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+/**
+ * Controller for user-related operations.
+ * Provides endpoints for fetching user details and roles, ensuring that access is secured
+ * and limited to the user themselves or users with appropriate permissions.
+ */
 @RestController
 @RequestMapping("/user/get")
 @AllArgsConstructor
@@ -24,7 +30,13 @@ public class UserController {
 
     private final UserService userService;
 
-
+    /**
+     * Retrieves the details of the user identified by the given email.
+     * This endpoint is secured and can only be accessed by the user themselves.
+     *
+     * @param email The email of the user whose details are to be retrieved.
+     * @return A ResponseEntity containing the UserDetailsDTO of the requested user.
+     */
     @GetMapping(value = "{email}/userDetails", produces = "application/json")
     @PreAuthorize("#email == authentication.principal.attributes['email'] && hasRole('USER')")
     public ResponseEntity<UserDetailsDTO> getAllUserDetails(@PathVariable String email) {
@@ -33,6 +45,13 @@ public class UserController {
         return ResponseEntity.ok().body(userDetailsDTO);
     }
 
+    /**
+     * Retrieves the roles of the user identified by the given email.
+     * This endpoint allows users to fetch their own roles based on their email.
+     *
+     * @param email The email of the user whose roles are to be retrieved.
+     * @return A ResponseEntity containing a list of roles associated with the user.
+     */
     @GetMapping("/{email}/roles")
     @PreAuthorize("#email == authentication.principal.attributes['email']")
     public ResponseEntity<?> getUserRoles(@PathVariable String email) {

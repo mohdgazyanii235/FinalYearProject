@@ -30,6 +30,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+
+/**
+ * Configuration for OAuth2 login security, enabling method security, and setting up beans required for OAuth2 authentication.
+ * This configuration class does the following:
+ * - integrates custom user services for OIDC.
+ * - Sets up CORS configuration.
+ * - Establishes a custom success handler for authentication events.
+ */
 @Configuration
 @Log4j2
 @AllArgsConstructor
@@ -42,6 +50,12 @@ public class OAuth2LoginSecurityConfig {
     private static final String GOOGLE = "google";
     private static final String AUTH_SERVER = "auth-server";
 
+
+     /**
+     * Configures the HttpSecurity to use OAuth2 login, enable CORS from a specific source, and customize authentication success and exception handling.
+     * @return the configured SecurityFilterChain
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -67,27 +81,36 @@ public class OAuth2LoginSecurityConfig {
     }
 
 
-//    Below code essentially returns which oidc user service to use depending on which auth server the user chose
+    /**
+     * Provides an OAuth2UserService based on the OIDC user request that determines the appropriate service to use based on the client registration ID.
+     * @return an instance of OAuth2UserService for OIDC user requests
+     */
     private OAuth2UserService<OidcUserRequest, OidcUser> getOIDCUserService() {
         return (userRequest) -> {
             if (userRequest.getClientRegistration().getRegistrationId().equals(GOOGLE)) {
                 return new GoogleOIDCUserService(userRepository, userService).loadUser(userRequest);
             } else if (userRequest.getClientRegistration().getRegistrationId().equals(AUTH_SERVER)) {
                 return new AuthServerOIDCUserService(userRepository, userService, restTemplate()).loadUser(userRequest);
-//                return new GoogleOIDCUserService(userRepository, userService).loadUser(userRequest);
             } else {
                 throw new UnknownRegistrationIdException("Unknown Registration ID");
             }
         };
     }
 
-
-
+    /**
+     * Creates an application listener that logs successful authentication events.
+     * @return the ApplicationListener for authentication success events
+     */
     @Bean
     ApplicationListener<AuthenticationSuccessEvent> successLogger() {
         return event -> log.info("Login success: " + event.getAuthentication());
     }
 
+
+    /**
+     * Configures CORS policy to allow requests from specific origins.
+     * @return the CorsConfigurationSource with the configured CORS policy
+     */
     @Bean
     CorsConfigurationSource myCorsConfiguration() {
         // TODO: Add this to report (Why am I doing this?)
@@ -101,6 +124,11 @@ public class OAuth2LoginSecurityConfig {
         return urlBasedCorsConfigurationSource;
     }
 
+    /**
+     * Configures the HttpFirewall to allow URL encoded slashes and percent signs.
+     * This is done because some Authorization code exchange request urls have double slashes that spring security flags as malicious.
+     * @return the configured HttpFirewall instance
+     */
     @Bean
     public HttpFirewall allowUrlEncodedSlashHttpFireWall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
@@ -109,6 +137,10 @@ public class OAuth2LoginSecurityConfig {
         return firewall;
     }
 
+    /**
+     * Provides a RestTemplate bean for making REST calls.
+     * @return a new instance of RestTemplate
+     */
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
