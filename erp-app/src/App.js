@@ -69,6 +69,22 @@ function App() {
     console.log(email);
     console.log(roles);
 
+    const getCookie = (name) => {
+        let cookieArray = document.cookie.split(';'); // Split the cookie string into an array
+      
+        for(let i = 0; i < cookieArray.length; i++) {
+          let cookie = cookieArray[i];
+          while (cookie.charAt(0) === ' ') {
+            cookie = cookie.substring(1); // Trim whitespace at the beginning
+          }
+          if (cookie.indexOf(name + "=") === 0) {
+            return cookie.substring(name.length + 1, cookie.length); // Extract and return the cookie value
+          }
+        }
+        return ""; // Return empty string if the cookie is not found
+      }
+      
+
 
 
     return (
@@ -79,7 +95,7 @@ function App() {
                 </div>
             ) : roleCheck("ROLE_NON_ONBOARDED_USER_A") ? (
                 <div className="App">
-                    <UserInfo email={email}/>
+                    <UserInfo email={email} />
                 </div>
             ) : roleCheck("ROLE_NON_ONBOARDED_USER_B") ? (
                 <div className="App">

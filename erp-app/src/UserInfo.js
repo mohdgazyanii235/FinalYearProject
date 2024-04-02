@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {SERVER_URL} from "./constant";
+import { getCookie } from './cookieUtils';
 
 function UserInfo({ email }) {
     const [firstName, setFirstName] = useState('');
@@ -17,6 +18,7 @@ function UserInfo({ email }) {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
+                "X-XSRF-TOKEN": getCookie('XSRF-TOKEN'),
             },
             body: JSON.stringify(payload),
         });
