@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service providing administrative functionalities such as managing companies,
+ * and handling roles and authorities for users within the system.
+ */
 @Service
 @AllArgsConstructor
 public class AdminService {
@@ -26,6 +30,8 @@ public class AdminService {
     private final AuthorityRepository authorityRepository;
     private final RoleRepository roleRepository;
 
+
+
     private UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = this.userRepository.getUserByEmail(username);
         if (user.isEmpty()) {
@@ -34,7 +40,6 @@ public class AdminService {
         return user.get();
     }
 
-    // TODO: Put this in a json config file such that it can be edited without recompiling
     private Role createAdminRolesAndAuthorities(String companyName) {
         Authority writeCompanyAuthorities = new Authority("WRITE_" + companyName.toUpperCase() + "_AUTHORITIES");
         Authority readCompanyAuthorities = new Authority("READ_" + companyName.toUpperCase() + "_AUTHORITIES");
@@ -54,6 +59,13 @@ public class AdminService {
         return admin;
     }
 
+    /**
+     * Creates a new company with the specified administrator and roles.
+     * Throws an AlreadyExistsException if a company with the same name already exists.
+     *
+     * @param createCompanyDTO Data Transfer Object containing the information needed to create a company.
+     * @throws AlreadyExistsException if the company name already exists.
+     */
     public void createCompany(CreateCompanyDTO createCompanyDTO) throws AlreadyExistsException {
         if (this.companyRepository.existsByName(createCompanyDTO.getName())) {
             throw new AlreadyExistsException("Company name already exists");

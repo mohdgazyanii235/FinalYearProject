@@ -18,6 +18,11 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Custom OIDC User Service for users authenticated through Google.
+ * Extends the default OIDC user service to incorporate additional processing
+ * like user registration and authority mapping specific to users authenticated by Google.
+ */
 @AllArgsConstructor
 public class GoogleOIDCUserService extends OidcUserService {
 
@@ -25,6 +30,15 @@ public class GoogleOIDCUserService extends OidcUserService {
     private final UserRepository userRepository;
     private final UserService userService;
 
+
+    /**
+     * Loads the OIDC user after authentication and performs custom processing like
+     * checking if the user is already registered and creating a new user if not.
+     *
+     * @param userRequest The user request after successful OIDC authentication.
+     * @return A {@link OidcUser} with authorities mapped from the user's roles.
+     * @throws OAuth2AuthenticationException if an authentication exception occurs during processing.
+     */
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
         OidcUser oidcUser = new OidcUserService().loadUser(userRequest);

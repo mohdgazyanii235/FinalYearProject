@@ -16,7 +16,7 @@ spring:
               - email
           auth-server:
             client-id: "erp-api"
-            client-secret: "$2a$10$jdJGhzsiIqYFpjJiYWMl/eKDOd8vdyQis2aynmFN0dgJ53XvpzzwC"
+            client-secret: ${AUTH_SERVER_SECRET}
             redirect-uri: "{baseUrl}/login/oauth2/code/auth-server"
             authorization-grant-type: "authorization_code"
             client-authentication-method: "client_secret_post"
@@ -33,10 +33,7 @@ spring:
             jwkSetUri: https://www.googleapis.com/oauth2/v3/certs
           auth-server:
             issuer-uri: http://127.0.0.1:8081
-#            authorization-uri: http://127.0.0.1:8081/oauth2/authorize
-#            token-uri: http://127.0.0.1:8081/oauth2/token
             user-info-uri: http://localhost:8082/userinfo
-#            jwk-set-uri: http://127.0.0.1:8081/oauth2/jwks
 
 
   datasource:

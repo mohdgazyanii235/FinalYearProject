@@ -26,6 +26,9 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Service class for managing user-related operations such as registration, role assignment, and onboarding.
+ */
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
@@ -34,6 +37,15 @@ public class UserService implements UserDetailsService {
     private final RoleService roleService;
     private final CompanyService companyService;
 
+
+    /**
+     * Loads a user by username (email in this context). This method is used by Spring Security
+     * during the authentication process.
+     *
+     * @param username The email of the user to load.
+     * @return UserDetails of the user found by email.
+     * @throws UsernameNotFoundException if the user is not found.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = this.userRepository.getUserByEmail(username);
@@ -44,11 +56,17 @@ public class UserService implements UserDetailsService {
     }
 
 
-
-    public boolean isUserOnboardingComplete(String oidcUserEmail) {
-        return this.userRepository.isOnboardingCompleteByEmail(oidcUserEmail);
-    }
-
+    /**
+     * Registers a new user with the information obtained from an OIDC authentication flow.
+     *
+     * @param OIDCUserInformationDTO Data transfer object containing user information from the OIDC provider.
+     * @param idToken The OIDC ID token.
+     * @param userInfo The OIDC user info.
+     * @param ssoIssuer The issuer of the SSO.
+     * @return An {@link OidcUser} representing the newly registered user.
+     * @throws NoSuchRoleException If a necessary role does not exist.
+     * @throws AlreadyExistsException If the user already exists.
+     */
     public OidcUser registerUser(OIDCUserInformationDTO OIDCUserInformationDTO, OidcIdToken idToken, OidcUserInfo userInfo, SSOIssuer ssoIssuer) throws NoSuchRoleException, AlreadyExistsException {
 
         if (this.existsByEmail(OIDCUserInformationDTO.getEmail())) {
@@ -68,6 +86,12 @@ public class UserService implements UserDetailsService {
         return new DefaultOidcUser(user.getAuthorities(), idToken, userInfo);
     }
 
+    /**
+     * Assigns roles to a user identified by email.
+     *
+     * @param userRoleDTO Data transfer object containing the email of the user and the roles to assign.
+     * @throws UsernameNotFoundException if the user is not found.
+     */
     public void assignRolesToUser(UserRoleDTO userRoleDTO) {
         Optional<User> userOptional = this.userRepository.getUserByEmail(userRoleDTO.getEmail());
         if (userOptional.isPresent()) {
@@ -85,24 +109,54 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Retrieves the first name of a user by their email.
+     *
+     * @param email The email of the user.
+     * @return The first name of the user, or null if not found.
+     */
     public String getFirstName(String email) {
         Optional<String> firstNameOptional = this.userRepository.getFirstNameByEmail(email);
         return firstNameOptional.orElse(null);
     }
 
+    /**
+     * Retrieves the last name of a user by their email.
+     *
+     * @param email The email of the user.
+     * @return The last name of the user, or null if not found.
+     */
     public String getLastName(String email) {
         Optional<String> lastNameOptional = this.userRepository.getLastNameByEmail(email);
         return lastNameOptional.orElse(null);
     }
 
+    /**
+     * Updates the first name of a user by their email.
+     *
+     * @param email The email of the user.
+     * @param firstName The new first name to be updated to.
+     */
     public void updateFirstName(String email, String firstName) {
         this.userRepository.updateFirstName(email, firstName);
     }
 
+    /**
+     * Updates the last name of a user by their email.
+     *
+     * @param email The email of the user.
+     * @param lastName The new last name to be updated to.
+     */
     public void updateLastName(String email, String lastName) {
         this.userRepository.updateLastName(email, lastName);
     }
 
+    /**
+     * Updates the role of a user during the onboarding process.
+     *
+     * @param email The email of the user.
+     * @param roleName The new role to be assigned.
+     */
     public void updateRole(String email, String roleName) {
         User user = (User) this.loadUserByUsername(email);
         try {
@@ -130,6 +184,12 @@ public class UserService implements UserDetailsService {
     }
 
 
+    /**
+     * Associates a user with a company during the onboarding process.
+     *
+     * @param joinCompanyDTO Data transfer object containing the email of the user and the name of the company to join.
+     * @throws NoSuchCompanyException if the specified company does not exist.
+     */
     public void joinCompany(JoinCompanyDTO joinCompanyDTO) throws NoSuchRoleException, NoSuchCompanyException {
         User user = (User) this.loadUserByUsername(joinCompanyDTO.getEmail());
         if (this.companyService.getCompanyByName(joinCompanyDTO.getCompanyName()) == null) {
@@ -139,6 +199,12 @@ public class UserService implements UserDetailsService {
         this.userRepository.save(user);
     }
 
+    /**
+     * Validates and finalizes the onboarding process for a user.
+     *
+     * @param onBoardingCompleteDTO Data transfer object containing the email of the user completing the onboarding.
+     * @throws NoSuchRoleException if the specified role does not exist.
+     */
     public void validateOnboardingComplete(OnBoardingCompleteDTO onBoardingCompleteDTO) throws NoSuchRoleException {
         User user = (User) this.loadUserByUsername(onBoardingCompleteDTO.getEmail());
         if (user.getCompany()!=null && user.getFirstName()!=null && user.getLastName()!=null) {
@@ -151,6 +217,11 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * 
+     * @param email
+     * @return
+     */
     public Boolean existsByEmail(String email) {
         return this.userRepository.existsByEmail(email);
     }

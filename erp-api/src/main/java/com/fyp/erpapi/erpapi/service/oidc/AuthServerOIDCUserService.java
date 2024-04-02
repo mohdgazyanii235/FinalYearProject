@@ -25,6 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Custom OIDC User Service for users authenticated through a custom Auth Server.
+ * This service extends the default OIDC user service to handle OIDC authenticated users,
+ * specifically those authenticated via an internal or custom authentication server.
+ */
 @AllArgsConstructor
 public class AuthServerOIDCUserService extends OidcUserService {
 
@@ -35,6 +40,13 @@ public class AuthServerOIDCUserService extends OidcUserService {
     private static final String USER_INFO_ENDPOINT = "http://localhost:8082/userinfo";
 
 
+    /**
+     * Retrieves user details from a custom user information endpoint.
+     *
+     * @param accessToken The access token to authenticate the request to the user info endpoint.
+     * @return {@link OidcUserInfo} containing details of the authenticated user.
+     * @throws UsernameNotFoundException if user details cannot be retrieved from the resource server.
+     */
     private OidcUserInfo getUserDetails(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
@@ -61,8 +73,16 @@ public class AuthServerOIDCUserService extends OidcUserService {
         }
     }
 
+    /**
+     * Loads the OIDC user after authentication and performs custom processing like
+     * checking if the user is already registered and creating a new user if not.
+     *
+     * @param userRequest the user request
+     * @return {@link OidcUser} containing the authenticated user.
+     */
+
     @Override
-    public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
+    public OidcUser loadUser(OidcUserRequest userRequest) {
         Optional<User> userOptional = userRepository.getRegisteredUserByEmailAndIssuer((String) userRequest.getIdToken().getClaims().get("sub"), SSOIssuer.AUTH_SERVER);
         OidcUserInfo oidcUserInfo = getUserDetails(userRequest.getAccessToken().getTokenValue());
         if (userOptional.isEmpty()) {
