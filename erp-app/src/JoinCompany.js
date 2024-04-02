@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {SERVER_URL} from "./constant";
+import { getCookie } from "./cookieUtils";
 
 function JoinCompany({ email }) {
 
@@ -16,6 +17,7 @@ function JoinCompany({ email }) {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
+                "X-XSRF-TOKEN": getCookie('XSRF-TOKEN'),
             },
         })
             .then(response => response.json())

@@ -70,7 +70,6 @@ public class OAuth2LoginSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                // TODO get into CSRF security later
                 .csrf((csrf) -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
@@ -128,7 +127,6 @@ public class OAuth2LoginSecurityConfig {
      */
     @Bean
     CorsConfigurationSource myCorsConfiguration() {
-        // TODO: Add this to report (Why am I doing this?)
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.addAllowedHeader("*");

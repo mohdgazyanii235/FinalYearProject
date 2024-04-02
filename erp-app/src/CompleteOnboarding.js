@@ -1,5 +1,6 @@
 import React from "react";
 import {SERVER_URL} from "./constant";
+import { getCookie } from "./cookieUtils";
 
 function CompleteOnboarding({ email }) {
 
@@ -12,6 +13,7 @@ function CompleteOnboarding({ email }) {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
+                "X-XSRF-TOKEN": getCookie('XSRF-TOKEN'),
             },
             body: JSON.stringify(payload),
         });

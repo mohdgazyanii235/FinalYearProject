@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {SERVER_URL} from "./constant";
+import { getCookie } from "./cookieUtils";
 
 function CreateCompany({ email }) {
 
@@ -16,7 +17,8 @@ function CreateCompany({ email }) {
             method: "POST",
             credentials: "include",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": getCookie('XSRF-TOKEN'),
             },
             body: JSON.stringify(payload),
         });
