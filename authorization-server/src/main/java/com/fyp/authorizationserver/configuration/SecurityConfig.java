@@ -25,6 +25,12 @@ import java.util.UUID;
 @EnableMethodSecurity
 @AllArgsConstructor
 public class SecurityConfig {
+
+    /**
+     * Defines a custom {@link PasswordEncoder} that uses simple equality for encoding and matching passwords.
+     *
+     * @return An instance of {@link PasswordEncoder}.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new PasswordEncoder() {
@@ -40,12 +46,23 @@ public class SecurityConfig {
         };
     }
 
+    /**
+     * Configures the {@link JwtDecoder} bean using the provided {@link JWKSource}.
+     *
+     * @param jwkSource The {@link JWKSource} used for decoding JWTs.
+     * @return An instance of {@link JwtDecoder}.
+     */
     @Bean
     public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
         return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
     }
 
 
+    /**
+     * Creates a {@link JWKSource} bean that holds a single RSA key pair for signing and verification of JWTs.
+     *
+     * @return An immutable {@link JWKSource} containing a single {@link RSAKey}.
+     */
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
         KeyPair keyPair = generateRsaKey();
@@ -59,6 +76,13 @@ public class SecurityConfig {
         return new ImmutableJWKSet<>(jwkSet);
     }
 
+
+    /**
+     * Generates an RSA {@link KeyPair} for use in signing and verification of JWTs.
+     *
+     * @return A generated RSA {@link KeyPair}.
+     * @throws IllegalStateException If RSA {@link KeyPairGenerator} initialization or key pair generation fails.
+     */
     private static KeyPair generateRsaKey() {
         KeyPair keyPair;
         try {
@@ -71,6 +95,12 @@ public class SecurityConfig {
         return keyPair;
     }
 
+
+    /**
+     * Configures {@link AuthorizationServerSettings} for the OAuth 2.0 Authorization Server.
+     *
+     * @return An instance of {@link AuthorizationServerSettings} with default settings.
+     */
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder().build();
