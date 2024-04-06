@@ -156,3 +156,6 @@
   - The solution to this problem is to not allow logins with the same email at all.
 - Authorization server users are also needing to be stored manually since I haven't really managed to make a registration endpoint there.
 - This might be a luxury for later but for now, users in the resource server and authorization server will be loaded through a CSV file.
+
+### 6th April 2024:
+- Finally, report is completed. All my code is merged into main and video is done!
